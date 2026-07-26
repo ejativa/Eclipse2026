@@ -943,33 +943,58 @@ body {
   }
 
   .header-bar {
-    padding: 6px 12px;
-    height: 52px;
+    padding: 4px 10px;
+    height: auto;
+    min-height: 48px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .brand-container {
+    gap: 8px;
   }
 
   .brand-title {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
   }
 
   .brand-subtitle {
     display: none;
   }
 
+  .solar-logo {
+    width: 26px;
+    height: 26px;
+  }
+
+  .header-right-actions {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
   .countdown-box {
-    padding: 3px 8px;
+    padding: 3px 6px;
+    gap: 5px;
+    border-radius: 14px;
   }
 
   .countdown-label {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
+    white-space: nowrap;
   }
 
   .countdown-digits {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .digit-unit {
+    font-size: 0.55rem;
   }
 
   .btn-header-action {
-    font-size: 0.7rem;
-    padding: 4px 8px;
+    font-size: 0.68rem;
+    padding: 3px 7px;
   }
 
   #btn-header-toggle-video {
@@ -977,8 +1002,9 @@ body {
   }
 
   .btn-lang {
-    font-size: 0.72rem;
-    padding: 4px 8px;
+    font-size: 0.68rem;
+    padding: 3px 7px;
+    white-space: nowrap;
   }
 
   /* Contenedor Principal Absoluto en Móviles */
