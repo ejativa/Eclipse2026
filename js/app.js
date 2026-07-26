@@ -1,7 +1,7 @@
 /**
- * viveElEclipse2026 - Aplicación Principal UI & Controller
- * Soporte para 50 municipios, Simulador Explicativo 2D Canvas a 60FPS Nativo en Vivo en la Esquina del Mapa,
- * imágenes panorámicas únicas 100% garantizadas, Carta Astral interactiva SVG y Modal Ficha Completa.
+ * viveElEclipse2026 - Aplicación Principal UI & Controller Responsive
+ * Soporte para 50 municipios, Barra de Navegación Móvil de Cambio Rápido Mapa/Ficha,
+ * Simulador Canvas 2D a 60FPS Nativo en Vivo en la Esquina del Mapa y Modal Ficha Completa.
  */
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Inicializar Mapa con Vista General de España
@@ -14,21 +14,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // 3. Inicializar Visualizador con Simulador Animado Canvas Nativo 60 FPS
   initLiveVideoWidget();
 
-  // 4. Callback al seleccionar una localidad en el mapa o buscador
+  // 4. Inicializar Navegación Responsive Exclusiva para Móviles
+  initMobileViewSwitch();
+
+  // 5. Callback al seleccionar una localidad en el mapa o buscador
   window.onLocationSelected = (location, index) => {
     updateDetailPanels(location);
     updateTourControls(index);
+
+    // En móviles, si se selecciona un punto en el mapa, cambiar suavemente al panel de información
+    if (window.innerWidth <= 768) {
+      switchMobileView("info");
+    }
   };
 
-  // 5. Callback para la Vista General de España
+  // 6. Callback para la Vista General de España
   window.onGeneralViewSelected = () => {
     showGeneralViewPanel();
   };
 
-  // 6. Mostrar por defecto la Vista General de España
+  // 7. Mostrar por defecto la Vista General de España
   mapManager.resetToGeneralView();
 
-  // 7. Geolocalización del usuario
+  // 8. Geolocalización del usuario
   geoManager.getUserLocation((err, coords, info) => {
     const geoStatusElem = document.getElementById("geo-status-banner");
     if (geoStatusElem) {
@@ -40,10 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 8. Configurar eventos de navegación en cuadrícula, tour y modal
+  // 9. Configurar eventos de navegación en cuadrícula, tour y modal
   setupEventListeners();
 
-  // 9. Delegación global de clics para el botón "Ver Ficha Completa" en popups del mapa
+  // 10. Delegación global de clics para el botón "Ver Ficha Completa" en popups del mapa
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".popup-btn");
     if (btn) {
@@ -58,6 +66,51 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const GLOBAL_FALLBACK_IMAGE = "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80";
+
+// Inicializar y controlar la barra de navegación de cambio rápido en teléfonos móviles
+function initMobileViewSwitch() {
+  const btnMap = document.getElementById("btn-mobile-show-map");
+  const btnInfo = document.getElementById("btn-mobile-show-info");
+
+  if (btnMap && btnInfo) {
+    btnMap.addEventListener("click", () => switchMobileView("map"));
+    btnInfo.addEventListener("click", () => switchMobileView("info"));
+  }
+
+  // Minimizar por defecto el reproductor de vídeo en teléfonos móviles para no tapar el mapa
+  if (window.innerWidth <= 768) {
+    const widget = document.getElementById("map-video-widget");
+    if (widget) widget.classList.add("minimized");
+  }
+}
+
+function switchMobileView(viewType) {
+  const sidebar = document.getElementById("sidebar-panel");
+  const mapView = document.getElementById("map-view");
+  const btnMap = document.getElementById("btn-mobile-show-map");
+  const btnInfo = document.getElementById("btn-mobile-show-info");
+
+  if (!sidebar || !mapView) return;
+
+  if (viewType === "map") {
+    sidebar.classList.remove("mobile-active");
+    mapView.classList.add("mobile-active");
+
+    btnMap?.classList.add("active");
+    btnInfo?.classList.remove("active");
+
+    // Re-renderizar tamaño del mapa Leaflet en móviles tras cambiar de pestaña
+    setTimeout(() => {
+      if (mapManager.map) mapManager.map.invalidateSize();
+    }, 100);
+  } else {
+    mapView.classList.remove("mobile-active");
+    sidebar.classList.add("mobile-active");
+
+    btnInfo?.classList.add("active");
+    btnMap?.classList.remove("active");
+  }
+}
 
 // Inicializar y controlar el Visualizador con Simulador Animado Canvas Nativo
 function initLiveVideoWidget() {
@@ -81,7 +134,7 @@ function initLiveVideoWidget() {
   const subtitles = [
     { p: 0.05, text: "🌅 Fase C1: Inicio del Eclipse Parcial. La Luna toca el disco solar." },
     { p: 0.35, text: "🌘 Avance del Eclipse Parcial. El Sol se convierte en una deslumbrante luna creciente." },
-    { p: 0.70, text: "💍 Anillo de Diamante (Efecto Baily): Últimos destellos de luz solar entre las montañas lunares." },
+    { p: 0.70, text: "💍 Anillo de Diamante (Efecto Baily): Últimos destellos de luz solar." },
     { p: 0.85, text: "🌑 TOTALIDAD 100%: La Corona Solar emerge brillante alrededor del disco negro." },
     { p: 0.95, text: "☀️ Fase C3: Reaparición del Sol y fin de la franja de oscuridad total." }
   ];
@@ -113,13 +166,11 @@ function initLiveVideoWidget() {
       ctx.fillRect(sx, sy, 1.5, 1.5);
     }
 
-    // Posición de la Luna pasando de izquierda (-r * 2.2) a derecha (+r * 2.2)
+    // Posición de la Luna pasando de izquierda a derecha
     const moonX = cx + (progress - 0.5) * (r * 3.6);
     const moonY = cy;
 
-    // Calcular superposición y fase de totalidad
     const dist = Math.hypot(cx - moonX, cy - moonY);
-    const isTotality = dist < 4;
 
     // Dibujar Corona Solar Resplandeciente
     if (dist < r * 1.5) {
@@ -211,7 +262,7 @@ function initLiveVideoWidget() {
         iframe.classList.add("hidden");
         canvas.classList.remove("hidden");
         subtitleOverlay.classList.remove("hidden");
-        if (statusText) statusText.innerText = "📚 Simulador Animado Activo (Transmisión en vivo el 12-Ago-2026)";
+        if (statusText) statusText.innerText = "📚 Simulador Animado Activo (12-Ago-2026)";
       } else if (val === "youtube") {
         canvas.classList.add("hidden");
         subtitleOverlay.classList.add("hidden");
@@ -357,7 +408,7 @@ function openLocationModal(loc) {
     </div>
 
     <!-- 3. GASTRONOMÍA Y RESTAURANTES -->
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+    <div class="modal-two-col">
       <div class="food-card">
         <div class="food-title">🍲 Qué Comer en ${loc.name}</div>
         <ul class="food-list">${dishesHTML}</ul>

@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>viveElEclipse2026 - Guía Interactiva de la Franja de Totalidad en España</title>
   <meta name="description" content="Mapa interactivo con 50 municipios en la franja de totalidad: 10 Puntos VIP Top destacados, Qué Comer, Dónde Comer, imágenes panorámicas, miradores y carta astral.">
 
   <!-- Estilos Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- Estilo Personalizado Cósmico -->
+  <!-- Estilo Personalizado Cósmico Responsive -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
       <div class="solar-logo"></div>
       <div>
         <h1 class="brand-title">viveElEclipse2026</h1>
-        <div class="brand-subtitle">12 de Agosto de 2026 • Franja de Totalidad en España</div>
+        <div class="brand-subtitle">12 de Agosto de 2026 • España</div>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
   <div class="main-container">
 
     <!-- SIDEBAR PANEL -->
-    <aside class="sidebar-panel">
+    <aside id="sidebar-panel" class="sidebar-panel">
 
       <!-- Buscador y Geolocalización -->
       <div class="search-geo-bar">
@@ -65,7 +65,7 @@
           <button id="btn-tour-prev" class="btn-tour">◀ Anterior</button>
           <span id="tour-counter" class="tour-counter">Punto 1 / 50</span>
           <button id="btn-tour-next" class="btn-tour">Siguiente ▶</button>
-          <button id="btn-reset-view" class="btn-tour" title="Vista General de España">🇪🇸 Vista General</button>
+          <button id="btn-reset-view" class="btn-tour" title="Vista General de España">🇪🇸 General</button>
         </div>
       </div>
 
@@ -150,16 +150,16 @@
 
     </aside>
 
-    <!-- MAP VIEW CON SIMULADOR/REPRODUCTOR NATIVO 100% GARANTIZADO EN LA ESQUINA DEL MAPA -->
-    <main class="map-view">
+    <!-- MAP VIEW CON SIMULADOR NATIVO 100% ADAPTADO A MÓVILES -->
+    <main id="map-view" class="map-view">
       <div id="map-container"></div>
 
-      <!-- VISUALIZADOR DE SIMULACIÓN Y VÍDEO EXPLICATIVO FLOTANTE EN LA ESQUINA DEL MAPA -->
+      <!-- VISUALIZADOR DE SIMULACIÓN Y VÍDEO EXPLICATIVO FLOTANTE COMPACTO Y ADAPTADO -->
       <div id="map-video-widget" class="map-video-widget glass-card">
         <div class="video-widget-header">
           <div class="video-widget-title">
             <span class="live-pulse-dot"></span>
-            <span>🎓 SIMULADOR EXPLICATIVO • ECLIPSE SOLAR</span>
+            <span>🎓 SIMULADOR ECLIPSE</span>
           </div>
           <div class="video-widget-controls">
             <button id="btn-toggle-video-min" class="btn-widget-action" title="Minimizar / Maximizar">_</button>
@@ -168,15 +168,13 @@
         </div>
 
         <div id="video-widget-body" class="video-widget-body">
-          <!-- Selector de animación o canal -->
           <div class="channel-selector-bar">
             <select id="video-channel-select" class="video-channel-select">
-              <option value="canvas">🎓 Simulador Astronómico 60FPS: Paso de la Luna y Corona</option>
+              <option value="canvas">🎓 Simulador Astronómico Paso Lunar (60FPS)</option>
               <option value="youtube">📺 Transmisión YouTube Live Directo</option>
             </select>
           </div>
 
-          <!-- Reproductor de CANVAS NATIVO 100% IMPOSIBLE DE FALLAR / SIN DEPENDENCIAS RED -->
           <div class="video-player-frame">
             <canvas id="eclipse-canvas-player" class="eclipse-canvas-player" width="360" height="200"></canvas>
 
@@ -190,20 +188,29 @@
               allowfullscreen>
             </iframe>
 
-            <!-- Leyenda explicativa superpuesta en tiempo real -->
             <div id="canvas-subtitle-overlay" class="canvas-subtitle-overlay">
-              <span id="canvas-subtitle-text">🌕 La Luna se alinea exactamente entre la Tierra y el Sol...</span>
+              <span id="canvas-subtitle-text">🌕 La Luna se alinea entre la Tierra y el Sol...</span>
             </div>
           </div>
 
           <div class="video-widget-footer">
-            <span id="video-status-text">📚 Simulador Animado Activo (Transmisión en vivo el 12-Ago-2026)</span>
+            <span id="video-status-text">📚 Simulador 60FPS</span>
           </div>
         </div>
       </div>
 
     </main>
 
+  </div>
+
+  <!-- BARRA FLOTANTE DE NAVEGACIÓN EXCLUSIVA PARA MÓVILES (CAMBIO RÁPIDO MAPA / FICHA) -->
+  <div class="mobile-switch-bar">
+    <button id="btn-mobile-show-map" class="btn-mobile-tab active">
+      <span>🗺️ Mapa Interactivo</span>
+    </button>
+    <button id="btn-mobile-show-info" class="btn-mobile-tab">
+      <span>📋 Ficha y Municipios</span>
+    </button>
   </div>
 
   <!-- MODAL DE FICHA COMPLETA INTERACTIVA PARA EL MUNICIPIO -->
