@@ -31,14 +31,15 @@ class RealAPIManager {
             const elLat = el.lat || (el.center ? el.center.lat : lat);
             const elLon = el.lon || (el.center ? el.center.lon : lng);
             const name = el.tags.name || el.tags["name:es"];
-            const type = el.tags.tourism === "camp_site" ? "Camping / Acampada" : el.tags.tourism === "guest_house" ? "Casa Rural / Posada" : "Hotel / Hostal";
+            const isES = (typeof i18n !== 'undefined' && i18n.currentLang === 'es');
+            const type = el.tags.tourism === "camp_site" ? (isES ? "Camping / Acampada" : "Camping / Campsite") : el.tags.tourism === "guest_house" ? (isES ? "Casa Rural / Posada" : "Guest House / B&B") : (isES ? "Hotel / Hostal" : "Hotel / Hostel");
             const distance = Math.round(this.calculateDistance(lat, lng, elLat, elLon));
 
             return {
               name: name,
               type: type,
               distanceKm: (distance / 1000).toFixed(1),
-              stars: el.tags.stars ? `${el.tags.stars}★` : "Estándar",
+              stars: el.tags.stars ? `${el.tags.stars}★` : (isES ? "Estándar" : "Standard"),
               phone: el.tags.phone || el.tags["contact:phone"] || null,
               website: el.tags.website || el.tags["contact:website"] || null,
               osmUrl: `https://www.openstreetmap.org/${el.type}/${el.id}`
@@ -113,8 +114,12 @@ class RealAPIManager {
       horizonElevation: `${horizonElevation}° sobre el horizonte WNW`,
       azimuth: `${azimuthDegree}° (Oeste-Noroeste)`,
       chartSVG: chartSVG,
-      astrologicalInsight: `En ${locName} (${lat.toFixed(2)}°, ${lng.toFixed(2)}°), el eclipse ocurre en el grado ${sunMoonZodiac} alineado con Regulus, el Corazón del León. Con el Ascendente en ${ascSign}, este hito astrológico desbloquea la soberanía personal, el propósito consciente y la purificación cósmica.`,
-      mantra: `"Bajo la sombra del Sol en ${locName}, despierto la luz inviolable de mi ser."`
+      astrologicalInsight: (typeof i18n !== 'undefined' && i18n.currentLang === 'es')
+        ? `En ${locName} (${lat.toFixed(2)}°, ${lng.toFixed(2)}°), el eclipse ocurre en el grado ${sunMoonZodiac} alineado con Regulus, el Corazón del León. Con el Ascendente en ${ascSign}, este hito astrológico desbloquea la soberanía personal, el propósito consciente y la purificación cósmica.`
+        : `In ${locName} (${lat.toFixed(2)}°, ${lng.toFixed(2)}°), the eclipse occurs at ${sunMoonZodiac} aligned with Regulus, the Heart of the Lion. With the Ascendant in ${ascSign}, this astrological milestone unlocks personal sovereignty, conscious purpose and cosmic purification.`,
+      mantra: (typeof i18n !== 'undefined' && i18n.currentLang === 'es')
+        ? `"Bajo la sombra del Sol en ${locName}, despierto la luz inviolable de mi ser."`
+        : `"Under the shadow of the Sun in ${locName}, I awaken the inviolable light of my being."`
     };
   }
 
@@ -176,7 +181,8 @@ class RealAPIManager {
     svg += `<text x="${ex}" y="${ey + 3}" text-anchor="middle" font-size="9" fill="#fbbf24" font-weight="bold">☉☌☽</text>`;
 
     // Etiqueta central de la Carta Astral
-    svg += `<text x="${center}" y="${center - 6}" text-anchor="middle" font-size="9" font-family="'Cinzel', serif" fill="#fbbf24" font-weight="bold">CARTA ASTRAL</text>`;
+    const chartLabel = (typeof i18n !== 'undefined' && i18n.currentLang === 'es') ? 'CARTA ASTRAL' : 'ASTRAL CHART';
+    svg += `<text x="${center}" y="${center - 6}" text-anchor="middle" font-size="9" font-family="'Cinzel', serif" fill="#fbbf24" font-weight="bold">${chartLabel}</text>`;
     svg += `<text x="${center}" y="${center + 6}" text-anchor="middle" font-size="8" fill="#fff">${zodiacDegree}</text>`;
 
     svg += `</svg>`;

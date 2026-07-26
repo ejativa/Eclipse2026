@@ -19,7 +19,7 @@ class GeolocationManager {
         document.getElementById("countdown-hours").innerText = "00";
         document.getElementById("countdown-mins").innerText = "00";
         document.getElementById("countdown-secs").innerText = "00";
-        document.getElementById("countdown-status").innerText = "¡EL ECLIPSE ESTÁ OCURRIENDO EN DIRECTO!";
+        document.getElementById("countdown-status").innerText = (typeof i18n !== 'undefined' && i18n.currentLang === 'es') ? "¡EL ECLIPSE ESTÁ OCURRIENDO EN DIRECTO!" : "THE ECLIPSE IS HAPPENING LIVE!";
         return;
       }
 

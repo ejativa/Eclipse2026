@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>viveElEclipse2026 - Guía Interactiva de la Franja de Totalidad en España</title>
-  <meta name="description" content="Mapa interactivo con 50 municipios en la franja de totalidad: 10 Puntos VIP Top destacados, Qué Comer, Dónde Comer, imágenes panorámicas, miradores y carta astral.">
+  <title>liveTheEclipse2026 - Interactive Guide to the Totality Path in Spain</title>
+  <meta name="description" content="Interactive map with 50 municipalities in the totality path: 10 Top VIP Points, What to Eat, Where to Eat, panoramic images, viewpoints and astral chart.">
 
-  <!-- Estilos Leaflet CSS -->
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- Estilo Personalizado Cósmico Responsive -->
+  <!-- Custom Cosmic Responsive Style -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -19,19 +19,31 @@
     <div class="brand-container">
       <div class="solar-logo"></div>
       <div>
-        <h1 class="brand-title">viveElEclipse2026</h1>
-        <div class="brand-subtitle">12 de Agosto de 2026 • España</div>
+        <h1 id="brand-title" class="brand-title">liveTheEclipse2026</h1>
+        <div id="brand-subtitle" class="brand-subtitle">August 12, 2026 • Spain</div>
       </div>
     </div>
 
-    <!-- Cuenta atrás -->
-    <div class="countdown-box">
-      <span class="countdown-label">Cuenta Atrás</span>
-      <div class="countdown-digits">
-        <span id="countdown-days">00</span><span class="digit-unit">d</span> :
-        <span id="countdown-hours">00</span><span class="digit-unit">h</span> :
-        <span id="countdown-mins">00</span><span class="digit-unit">m</span> :
-        <span id="countdown-secs">00</span><span class="digit-unit">s</span>
+    <div class="header-right-actions">
+      <!-- LANGUAGE TOGGLE BUTTON -->
+      <button id="btn-lang-toggle" class="btn-header-action btn-lang" title="Switch Language">
+        🇪🇸 ES
+      </button>
+
+      <!-- SIMULATOR TOGGLE FOR DESKTOP -->
+      <button id="btn-header-toggle-video" class="btn-header-action" title="Open Eclipse Simulator">
+        📹 Eclipse Simulator
+      </button>
+
+      <!-- Countdown -->
+      <div class="countdown-box">
+        <span id="countdown-label" class="countdown-label">Countdown</span>
+        <div class="countdown-digits">
+          <span id="countdown-days">00</span><span class="digit-unit">d</span> :
+          <span id="countdown-hours">00</span><span class="digit-unit">h</span> :
+          <span id="countdown-mins">00</span><span class="digit-unit">m</span> :
+          <span id="countdown-secs">00</span><span class="digit-unit">s</span>
+        </div>
       </div>
     </div>
   </header>
@@ -42,10 +54,10 @@
     <!-- SIDEBAR PANEL -->
     <aside id="sidebar-panel" class="sidebar-panel">
 
-      <!-- Buscador y Geolocalización -->
+      <!-- Search & Geolocation -->
       <div class="search-geo-bar">
         <div class="search-input-wrapper">
-          <input type="text" id="location-search" class="search-input" placeholder="🔍 Buscar municipio o filtra los 10 Puntos VIP Top (ej. Muxía, Sigüenza, Burgos)...">
+          <input type="text" id="location-search" class="search-input" placeholder="🔍 Search municipality or filter VIP Top 10...">
           <div id="search-dropdown" class="search-dropdown hidden">
             <div id="search-results-list"></div>
           </div>
@@ -53,90 +65,88 @@
 
         <div id="geo-status-banner" class="geo-banner">
           <div class="banner-badge bg-partial">
-            📍 Vista General de España. Selecciona un punto o usa el tour.
+            📍 General View of Spain. Select a point or use the tour.
           </div>
         </div>
       </div>
 
-      <!-- Tour Controller: Caminar por la Franja -->
+      <!-- Tour Controller -->
       <div class="tour-controller">
-        <div class="tour-title">🚶 Tour "Caminar por la Franja"</div>
+        <div id="tour-title" class="tour-title">🚶 Tour "Walk the Path"</div>
         <div class="tour-actions">
-          <button id="btn-tour-prev" class="btn-tour">◀ Anterior</button>
-          <span id="tour-counter" class="tour-counter">Punto 1 / 50</span>
-          <button id="btn-tour-next" class="btn-tour">Siguiente ▶</button>
-          <button id="btn-reset-view" class="btn-tour" title="Vista General de España">🇪🇸 General</button>
+          <button id="btn-tour-prev" class="btn-tour">◀ Previous</button>
+          <span id="tour-counter" class="tour-counter">Point 1 / 50</span>
+          <button id="btn-tour-next" class="btn-tour">Next ▶</button>
+          <button id="btn-reset-view" class="btn-tour" title="General View of Spain">🇪🇸 Overview</button>
         </div>
       </div>
 
-      <!-- Header del Municipio Seleccionado con Imagen Característica Panorámica Real -->
+      <!-- Location Header -->
       <div class="location-header">
         <div id="detail-hero-wrapper" class="location-hero-wrapper hidden">
-          <img id="detail-hero-img" src="" alt="Fotografía Característica del Municipio" class="location-hero-img">
+          <img id="detail-hero-img" src="" alt="Municipality Featured Photo" class="location-hero-img">
         </div>
-        <div id="detail-vip-badge" class="vip-top-badge hidden">🏆 PUNTO TOP 10 RECOMENDADO</div>
-        <h2 id="detail-title" class="location-name">Vista General de la Península</h2>
+        <div id="detail-vip-badge" class="vip-top-badge hidden">🏆 TOP 10 RECOMMENDED POINT</div>
+        <h2 id="detail-title" class="location-name">Totality Path across Spain</h2>
         <div class="location-sub">
-          <span id="detail-province">Selecciona una localidad en el mapa</span>
-          <span id="detail-duration-badge" class="duration-badge">Franja 100% Totalidad</span>
+          <span id="detail-province">Select a location on the map</span>
+          <span id="detail-duration-badge" class="duration-badge">100% Totality Path</span>
         </div>
-        <!-- INSIGNIA DE HORA EXACTA DE MÁXIMA VISIBILIDAD -->
+        <!-- Exact Time Banner -->
         <div id="exact-time-banner" class="exact-time-banner hidden">
           <span class="exact-time-icon">🌟</span>
           <div>
-            <div class="exact-time-title">HORA EXACTA DE MÁXIMA VISIBILIDAD:</div>
+            <div id="exact-time-label" class="exact-time-title">EXACT TIME OF MAXIMUM VISIBILITY:</div>
             <div id="exact-time-value" class="exact-time-clock">--:--:-- CEST</div>
           </div>
         </div>
       </div>
 
-      <!-- Selector de Origen para el Planificador de Ruta -->
+      <!-- Origin Selector -->
       <div class="origin-selector-box">
-        <label for="route-origin-select" class="origin-label">
-          🚘 Planificador de Ruta: Selecciona tu punto de origen
+        <label id="origin-label" for="route-origin-select" class="origin-label">
+          🚘 Route Planner: Select your point of origin
         </label>
-        <select id="route-origin-select" class="origin-select">
-          <!-- Se puebla dinámicamente -->
-        </select>
+        <select id="route-origin-select" class="origin-select"></select>
       </div>
 
-      <!-- MENÚ EN CUADRÍCULA -->
+      <!-- NAV GRID -->
       <nav class="nav-grid">
         <button class="nav-card active" data-tab="tab-astro">
           <span class="nav-icon">⏱️</span>
-          <span class="nav-label">Astronomía</span>
+          <span class="nav-label" data-i18n="tabAstronomy">Astronomy</span>
         </button>
         <button class="nav-card" data-tab="tab-route">
           <span class="nav-icon">🚘</span>
-          <span class="nav-label">Ruta Origen</span>
+          <span class="nav-label" data-i18n="tabRoute">Route</span>
         </button>
         <button class="nav-card" data-tab="tab-hotels">
           <span class="nav-icon">🏨</span>
-          <span class="nav-label">Alojamientos</span>
+          <span class="nav-label" data-i18n="tabHotels">Hotels</span>
         </button>
         <button class="nav-card" data-tab="tab-todo">
           <span class="nav-icon">🎯</span>
-          <span class="nav-label">Qué Hacer</span>
+          <span class="nav-label" data-i18n="tabToDo">Activities</span>
         </button>
         <button class="nav-card" data-tab="tab-what-to-eat">
           <span class="nav-icon">🍲</span>
-          <span class="nav-label">Qué Comer</span>
+          <span class="nav-label" data-i18n="tabWhatToEat">What to Eat</span>
         </button>
         <button class="nav-card" data-tab="tab-where-to-eat">
           <span class="nav-icon">🍽️</span>
-          <span class="nav-label">Dónde Comer</span>
+          <span class="nav-label" data-i18n="tabWhereToEat">Where to Eat</span>
         </button>
         <button class="nav-card" data-tab="tab-logistics">
           <span class="nav-icon">📍</span>
-          <span class="nav-label">Miradores</span>
+          <span class="nav-label" data-i18n="tabLogistics">Viewpoints</span>
         </button>
         <button class="nav-card" data-tab="tab-astrology">
           <span class="nav-icon">🔮</span>
-          <span class="nav-label">Astrología</span>
+          <span class="nav-label" data-i18n="tabAstrology">Astrology</span>
         </button>
       </nav>
 
-      <!-- Contenido de Secciones -->
+      <!-- Tab Content Panes -->
       <div class="tabs-content">
         <div id="tab-astro" class="tab-pane active"><div id="tab-astro-content"></div></div>
         <div id="tab-route" class="tab-pane"><div id="tab-route-content"></div></div>
@@ -150,91 +160,79 @@
 
     </aside>
 
-    <!-- MAP VIEW CON SIMULADOR NATIVO 100% ADAPTADO A MÓVILES -->
-    <main id="map-view" class="map-view">
+    <!-- MAP VIEW -->
+    <main id="map-view" class="map-view mobile-active">
       <div id="map-container"></div>
+    </main>
 
-      <!-- VISUALIZADOR DE SIMULACIÓN Y VÍDEO EXPLICATIVO FLOTANTE COMPACTO Y ADAPTADO -->
-      <div id="map-video-widget" class="map-video-widget glass-card">
-        <div class="video-widget-header">
-          <div class="video-widget-title">
-            <span class="live-pulse-dot"></span>
-            <span>🎓 SIMULADOR ECLIPSE</span>
-          </div>
-          <div class="video-widget-controls">
-            <button id="btn-toggle-video-min" class="btn-widget-action" title="Minimizar / Maximizar">_</button>
-            <button id="btn-close-video-widget" class="btn-widget-action" title="Cerrar Visualizador">&times;</button>
-          </div>
+    <!-- ECLIPSE SIMULATOR WIDGET (z-index 9999) -->
+    <div id="map-video-widget" class="map-video-widget glass-card">
+      <div class="video-widget-header">
+        <div class="video-widget-title">
+          <span class="live-pulse-dot"></span>
+          <span id="sim-header-title">🎓 SOLAR ECLIPSE SIMULATOR</span>
         </div>
-
-        <div id="video-widget-body" class="video-widget-body">
-          <div class="channel-selector-bar">
-            <select id="video-channel-select" class="video-channel-select">
-              <option value="canvas">🎓 Simulador Astronómico Paso Lunar (60FPS)</option>
-              <option value="youtube">📺 Transmisión YouTube Live Directo</option>
-            </select>
-          </div>
-
-          <div class="video-player-frame">
-            <canvas id="eclipse-canvas-player" class="eclipse-canvas-player" width="360" height="200"></canvas>
-
-            <iframe 
-              id="live-video-iframe" 
-              class="hidden"
-              src="" 
-              title="Emisión en Directo YouTube"
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-            </iframe>
-
-            <div id="canvas-subtitle-overlay" class="canvas-subtitle-overlay">
-              <span id="canvas-subtitle-text">🌕 La Luna se alinea entre la Tierra y el Sol...</span>
-            </div>
-          </div>
-
-          <div class="video-widget-footer">
-            <span id="video-status-text">📚 Simulador 60FPS</span>
-          </div>
+        <div class="video-widget-controls">
+          <button id="btn-toggle-video-min" class="btn-widget-action" title="Minimize / Maximize">_</button>
+          <button id="btn-close-video-widget" class="btn-widget-action" title="Close Simulator">&times;</button>
         </div>
       </div>
 
-    </main>
+      <div id="video-widget-body" class="video-widget-body">
+        <div class="channel-selector-bar">
+          <select id="video-channel-select" class="video-channel-select">
+            <option value="canvas">🎓 Astronomical Lunar Transit Simulator (60FPS)</option>
+            <option value="youtube">📺 YouTube Live Stream</option>
+          </select>
+        </div>
+
+        <div class="video-player-frame">
+          <canvas id="eclipse-canvas-player" class="eclipse-canvas-player" width="360" height="200"></canvas>
+          <iframe id="live-video-iframe" class="hidden" src="" title="YouTube Live Stream" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div id="canvas-subtitle-overlay" class="canvas-subtitle-overlay">
+            <span id="canvas-subtitle-text">🌕 The Moon aligns between the Earth and the Sun...</span>
+          </div>
+        </div>
+
+        <div class="video-widget-footer">
+          <span id="video-status-text">📚 60FPS Simulator</span>
+        </div>
+      </div>
+    </div>
 
   </div>
 
-  <!-- BARRA FLOTANTE DE NAVEGACIÓN EXCLUSIVA PARA MÓVILES (CAMBIO RÁPIDO MAPA / FICHA) -->
+  <!-- MOBILE BOTTOM NAV BAR -->
   <div class="mobile-switch-bar">
     <button id="btn-mobile-show-map" class="btn-mobile-tab active">
-      <span>🗺️ Mapa Interactivo</span>
+      <span>🗺️ Interactive Map</span>
     </button>
     <button id="btn-mobile-show-info" class="btn-mobile-tab">
-      <span>📋 Ficha y Municipios</span>
+      <span>📋 Info & Towns</span>
     </button>
   </div>
 
-  <!-- MODAL DE FICHA COMPLETA INTERACTIVA PARA EL MUNICIPIO -->
+  <!-- FULL-SCREEN MODAL -->
   <div id="location-modal" class="modal-overlay hidden">
     <div class="modal-container glass-card">
       <div id="modal-hero-wrapper" class="modal-hero-wrapper">
-        <img id="modal-hero-img" src="" alt="Fotografía del Municipio" class="modal-hero-img">
+        <img id="modal-hero-img" src="" alt="Municipality Photo" class="modal-hero-img">
       </div>
       <div class="modal-header">
         <div>
-          <div id="modal-vip-badge" class="vip-top-badge hidden">🏆 PUNTO TOP 10 RECOMENDADO</div>
-          <h2 id="modal-location-title" class="modal-title">Nombre del Municipio</h2>
-          <div id="modal-location-province" class="modal-sub">Provincia</div>
+          <div id="modal-vip-badge" class="vip-top-badge hidden">🏆 TOP 10 RECOMMENDED POINT</div>
+          <h2 id="modal-location-title" class="modal-title">Municipality Name</h2>
+          <div id="modal-location-province" class="modal-sub">Province</div>
         </div>
-        <button id="modal-close-btn" class="modal-close-btn" title="Cerrar Ficha">&times;</button>
+        <button id="modal-close-btn" class="modal-close-btn" title="Close Card">&times;</button>
       </div>
-      <div id="modal-body-content" class="modal-body">
-        <!-- Se puebla dinámicamente -->
-      </div>
+      <div id="modal-body-content" class="modal-body"></div>
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- Scripts (i18n loaded first) -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/data.js"></script>
   <script src="js/api.js"></script>
   <script src="js/geolocation.js"></script>

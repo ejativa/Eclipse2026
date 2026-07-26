@@ -121,20 +121,21 @@ class EclipseMapManager {
 
       const displayImg = loc.imageUrl || fallbackImg;
 
-      // Contenido del Popup con etiqueta img e interceptor onerror
+      // Popup content with i18n support
+      const T = (k, p) => (typeof i18n !== 'undefined') ? i18n.t(k, p) : k;
       const popupContent = `
         <div class="map-popup-card ${isVip ? 'popup-vip' : ''}">
           <div class="popup-thumb-box">
             <img src="${displayImg}" alt="${loc.name}" class="popup-thumb-img" onerror="this.onerror=null; this.src='${fallbackImg}';">
           </div>
           <div class="popup-title">
-            ${isVip ? '🏆 <b>PUNTO TOP 10 VIP</b><br>' : ''}${loc.name}
+            ${isVip ? T('popupVip') + '<br>' : ''}${loc.name}
           </div>
           <div class="popup-sub">${loc.province}</div>
-          <div class="popup-time">🌟 Máximo: <b>${loc.timeline.totalityMax}</b></div>
-          <div class="popup-duration">⏱️ ${loc.timeline.formattedDuration} de totalidad</div>
+          <div class="popup-time">${T('popupMax')} <b>${loc.timeline.totalityMax}</b></div>
+          <div class="popup-duration">${T('popupDuration', {dur: loc.timeline.formattedDuration})}</div>
           <button data-index="${index}" class="popup-btn">
-            Ver Ficha Completa ➔
+            ${T('popupBtn')}
           </button>
         </div>
       `;

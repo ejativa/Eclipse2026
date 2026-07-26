@@ -1,57 +1,60 @@
 /**
- * viveElEclipse2026 - Aplicación Principal UI & Controller Responsive
- * Soporte para 50 municipios, Barra de Navegación Móvil de Cambio Rápido Mapa/Ficha,
- * Simulador Canvas 2D a 60FPS Nativo en Vivo en la Esquina del Mapa y Modal Ficha Completa.
+ * liveTheEclipse2026 - Main UI Controller with i18n Support
+ * English default, Spanish secondary. 50 municipalities, VIP Top 10, Canvas 60FPS Simulator.
  */
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Inicializar Mapa con Vista General de España
+  // 0. Apply i18n to static HTML elements
+  applyStaticTranslations();
+
+  // 1. Initialize Map
   mapManager.initMap("map-container");
 
-  // 2. Poblar selectores de origen y buscador de 50 municipios
+  // 2. Populate selectors
   populateOriginSelector();
   populateLocationSearch();
 
-  // 3. Inicializar Visualizador con Simulador Animado Canvas Nativo 60 FPS
+  // 3. Initialize Simulator
   initLiveVideoWidget();
 
-  // 4. Inicializar Navegación Responsive Exclusiva para Móviles
+  // 4. Initialize Mobile Nav
   initMobileViewSwitch();
 
-  // 5. Callback al seleccionar una localidad en el mapa o buscador
+  // 5. Location selected callback
   window.onLocationSelected = (location, index) => {
     updateDetailPanels(location);
     updateTourControls(index);
-
-    // En móviles, si se selecciona un punto en el mapa, cambiar suavemente al panel de información
     if (window.innerWidth <= 768) {
       switchMobileView("info");
     }
   };
 
-  // 6. Callback para la Vista General de España
+  // 6. General view callback
   window.onGeneralViewSelected = () => {
     showGeneralViewPanel();
   };
 
-  // 7. Mostrar por defecto la Vista General de España
+  // 7. Show general view by default
   mapManager.resetToGeneralView();
 
-  // 8. Geolocalización del usuario
+  // 8. Geolocation
   geoManager.getUserLocation((err, coords, info) => {
     const geoStatusElem = document.getElementById("geo-status-banner");
     if (geoStatusElem) {
       geoStatusElem.innerHTML = `
         <div class="banner-badge ${info.inTotality ? 'bg-totality' : 'bg-partial'}">
-          ${info.message}
+          ${info.inTotality
+            ? i18n.t("geoInTotality", { location: info.closestLocation.name })
+            : i18n.t("geoOutside", { distance: info.distanceKm, location: info.closestLocation.name })
+          }
         </div>
       `;
     }
   });
 
-  // 9. Configurar eventos de navegación en cuadrícula, tour y modal
+  // 9. Event listeners
   setupEventListeners();
 
-  // 10. Delegación global de clics para el botón "Ver Ficha Completa" en popups del mapa
+  // 10. Popup button delegation
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".popup-btn");
     if (btn) {
@@ -63,25 +66,65 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  // 11. Language toggle
+  document.getElementById("btn-lang-toggle")?.addEventListener("click", () => {
+    i18n.toggleLang();
+  });
 });
 
 const GLOBAL_FALLBACK_IMAGE = "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=800&q=80";
 
-// Inicializar y controlar la barra de navegación de cambio rápido en teléfonos móviles
+// Apply translations to all static HTML elements
+function applyStaticTranslations() {
+  const T = (k, p) => i18n.t(k, p);
+
+  document.getElementById("brand-title").innerText = T("brandTitle");
+  document.getElementById("brand-subtitle").innerText = T("brandSubtitle");
+  document.getElementById("countdown-label").innerText = T("countdown");
+  document.getElementById("btn-header-toggle-video").innerText = T("simulatorBtn");
+  document.getElementById("location-search").placeholder = T("searchPlaceholder");
+  document.getElementById("tour-title").innerText = T("tourTitle");
+  document.getElementById("btn-tour-prev").innerText = T("tourPrev");
+  document.getElementById("btn-tour-next").innerText = T("tourNext");
+  document.getElementById("btn-reset-view").innerText = T("tourGeneral");
+  document.getElementById("origin-label").innerText = T("originLabel");
+  document.getElementById("exact-time-label").innerText = T("exactTimeTitle");
+  document.getElementById("sim-header-title").innerText = T("simTitle");
+  document.getElementById("video-status-text").innerText = T("simStatus");
+
+  // Mobile bottom bar
+  document.getElementById("btn-mobile-show-map").innerHTML = `<span>${T("mobileMap")}</span>`;
+  document.getElementById("btn-mobile-show-info").innerHTML = `<span>${T("mobileInfo")}</span>`;
+
+  // Language button
+  const langBtn = document.getElementById("btn-lang-toggle");
+  if (langBtn) {
+    langBtn.innerText = T("langSwitch");
+    langBtn.title = T("langSwitchTitle");
+  }
+
+  // Nav grid labels
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    el.innerText = T(key);
+  });
+
+  // Simulator channel options
+  const channelSelect = document.getElementById("video-channel-select");
+  if (channelSelect) {
+    channelSelect.options[0].text = T("simCanvas");
+    channelSelect.options[1].text = T("simYoutube");
+  }
+
+  // Page title
+  document.title = T("brandTitle") + " - Interactive Totality Path Guide";
+}
+
+// Mobile view switch
 function initMobileViewSwitch() {
-  const btnMap = document.getElementById("btn-mobile-show-map");
-  const btnInfo = document.getElementById("btn-mobile-show-info");
-
-  if (btnMap && btnInfo) {
-    btnMap.addEventListener("click", () => switchMobileView("map"));
-    btnInfo.addEventListener("click", () => switchMobileView("info"));
-  }
-
-  // Minimizar por defecto el reproductor de vídeo en teléfonos móviles para no tapar el mapa
-  if (window.innerWidth <= 768) {
-    const widget = document.getElementById("map-video-widget");
-    if (widget) widget.classList.add("minimized");
-  }
+  document.getElementById("btn-mobile-show-map")?.addEventListener("click", () => switchMobileView("map"));
+  document.getElementById("btn-mobile-show-info")?.addEventListener("click", () => switchMobileView("info"));
 }
 
 function switchMobileView(viewType) {
@@ -89,49 +132,60 @@ function switchMobileView(viewType) {
   const mapView = document.getElementById("map-view");
   const btnMap = document.getElementById("btn-mobile-show-map");
   const btnInfo = document.getElementById("btn-mobile-show-info");
-
   if (!sidebar || !mapView) return;
 
   if (viewType === "map") {
     sidebar.classList.remove("mobile-active");
     mapView.classList.add("mobile-active");
-
     btnMap?.classList.add("active");
     btnInfo?.classList.remove("active");
-
-    // Re-renderizar tamaño del mapa Leaflet en móviles tras cambiar de pestaña
-    setTimeout(() => {
-      if (mapManager.map) mapManager.map.invalidateSize();
-    }, 100);
+    setTimeout(() => { if (mapManager.map) mapManager.map.invalidateSize(); }, 100);
   } else {
     mapView.classList.remove("mobile-active");
     sidebar.classList.add("mobile-active");
-
     btnInfo?.classList.add("active");
     btnMap?.classList.remove("active");
   }
 }
 
-// Inicializar y controlar el Visualizador con Simulador Animado Canvas Nativo
+// Eclipse Simulator Widget
 function initLiveVideoWidget() {
   const widget = document.getElementById("map-video-widget");
   const widgetBody = document.getElementById("video-widget-body");
   const btnMin = document.getElementById("btn-toggle-video-min");
   const btnClose = document.getElementById("btn-close-video-widget");
+  const btnHeaderToggle = document.getElementById("btn-header-toggle-video");
   const channelSelect = document.getElementById("video-channel-select");
   const canvas = document.getElementById("eclipse-canvas-player");
   const iframe = document.getElementById("live-video-iframe");
   const subtitleOverlay = document.getElementById("canvas-subtitle-overlay");
   const subtitleText = document.getElementById("canvas-subtitle-text");
   const statusText = document.getElementById("video-status-text");
-
   if (!widget || !canvas) return;
 
-  // Iniciar animación en Canvas 2D a 60 FPS
-  let animId = null;
-  let progress = 0; // 0 a 1 (paso de la luna)
+  widget.classList.remove("hidden", "minimized");
 
-  const subtitles = [
+  if (btnHeaderToggle) {
+    btnHeaderToggle.addEventListener("click", () => {
+      if (widget.classList.contains("hidden")) {
+        widget.classList.remove("hidden", "minimized");
+      } else {
+        widget.classList.toggle("minimized");
+      }
+    });
+  }
+
+  let animId = null;
+  let progress = 0;
+
+  const subtitlesEN = [
+    { p: 0.05, text: "🌅 Phase C1: Partial Eclipse begins. The Moon touches the solar disk." },
+    { p: 0.35, text: "🌘 Partial Eclipse advances. The Sun becomes a dazzling crescent." },
+    { p: 0.70, text: "💍 Diamond Ring (Baily's Beads): Last flashes of sunlight." },
+    { p: 0.85, text: "🌑 100% TOTALITY: The Solar Corona emerges brilliantly around the dark disk." },
+    { p: 0.95, text: "☀️ Phase C3: Sun reappears and the shadow band ends." }
+  ];
+  const subtitlesES = [
     { p: 0.05, text: "🌅 Fase C1: Inicio del Eclipse Parcial. La Luna toca el disco solar." },
     { p: 0.35, text: "🌘 Avance del Eclipse Parcial. El Sol se convierte en una deslumbrante luna creciente." },
     { p: 0.70, text: "💍 Anillo de Diamante (Efecto Baily): Últimos destellos de luz solar." },
@@ -142,155 +196,89 @@ function initLiveVideoWidget() {
   function drawSimulatedEclipse() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    const w = canvas.width;
-    const h = canvas.height;
-    const cx = w / 2;
-    const cy = h / 2;
-    const r = 45;
-
+    const w = canvas.width, h = canvas.height, cx = w / 2, cy = h / 2, r = 45;
     ctx.clearRect(0, 0, w, h);
 
-    // Fondo del espacio profundo
     const bgGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, w / 1.2);
     bgGrad.addColorStop(0, "#080c1a");
     bgGrad.addColorStop(1, "#030408");
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
 
-    // Estrellas titilantes
-    ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
     for (let i = 0; i < 25; i++) {
-      const sx = (Math.sin(i * 99 + progress * 2) * 0.5 + 0.5) * w;
-      const sy = (Math.cos(i * 33 + progress * 2) * 0.5 + 0.5) * h;
-      ctx.fillRect(sx, sy, 1.5, 1.5);
+      ctx.fillRect((Math.sin(i*99+progress*2)*0.5+0.5)*w, (Math.cos(i*33+progress*2)*0.5+0.5)*h, 1.5, 1.5);
     }
 
-    // Posición de la Luna pasando de izquierda a derecha
-    const moonX = cx + (progress - 0.5) * (r * 3.6);
-    const moonY = cy;
-
+    const moonX = cx + (progress - 0.5) * (r * 3.6), moonY = cy;
     const dist = Math.hypot(cx - moonX, cy - moonY);
 
-    // Dibujar Corona Solar Resplandeciente
     if (dist < r * 1.5) {
-      const coronaGrad = ctx.createRadialGradient(cx, cy, r * 0.8, cx, cy, r * 2.4);
-      coronaGrad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
-      coronaGrad.addColorStop(0.3, "rgba(251, 191, 36, 0.7)");
-      coronaGrad.addColorStop(0.7, "rgba(56, 189, 248, 0.3)");
-      coronaGrad.addColorStop(1, "transparent");
+      const cg = ctx.createRadialGradient(cx, cy, r*0.8, cx, cy, r*2.4);
+      cg.addColorStop(0, "rgba(255,255,255,0.95)");
+      cg.addColorStop(0.3, "rgba(251,191,36,0.7)");
+      cg.addColorStop(0.7, "rgba(56,189,248,0.3)");
+      cg.addColorStop(1, "transparent");
+      ctx.fillStyle = cg;
+      ctx.beginPath(); ctx.arc(cx, cy, r*2.4, 0, Math.PI*2); ctx.fill();
 
-      ctx.fillStyle = coronaGrad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r * 2.4, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Destellos ráfaga de la corona
-      ctx.strokeStyle = "rgba(251, 191, 36, 0.3)";
-      ctx.lineWidth = 1.5;
-      for (let a = 0; a < Math.PI * 2; a += Math.PI / 12) {
-        const len = r * (1.6 + Math.sin(a * 5 + progress * 10) * 0.4);
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
-        ctx.lineTo(cx + Math.cos(a) * len, cy + Math.sin(a) * len);
-        ctx.stroke();
+      ctx.strokeStyle = "rgba(251,191,36,0.3)"; ctx.lineWidth = 1.5;
+      for (let a = 0; a < Math.PI*2; a += Math.PI/12) {
+        const len = r*(1.6+Math.sin(a*5+progress*10)*0.4);
+        ctx.beginPath(); ctx.moveTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+        ctx.lineTo(cx+Math.cos(a)*len, cy+Math.sin(a)*len); ctx.stroke();
       }
     }
 
-    // Dibujar Sol Radiante
-    const sunGrad = ctx.createRadialGradient(cx, cy, 5, cx, cy, r);
-    sunGrad.addColorStop(0, "#ffffff");
-    sunGrad.addColorStop(0.6, "#fbbf24");
-    sunGrad.addColorStop(1, "#f97316");
+    const sg = ctx.createRadialGradient(cx, cy, 5, cx, cy, r);
+    sg.addColorStop(0, "#ffffff"); sg.addColorStop(0.6, "#fbbf24"); sg.addColorStop(1, "#f97316");
+    ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
 
-    ctx.fillStyle = sunGrad;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.fillStyle = "#06070d"; ctx.beginPath(); ctx.arc(moonX, moonY, r-0.5, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = "rgba(15,23,42,0.8)"; ctx.lineWidth = 1.5; ctx.stroke();
 
-    // Dibujar Disco Negro de la Luna
-    ctx.fillStyle = "#06070d";
-    ctx.beginPath();
-    ctx.arc(moonX, moonY, r - 0.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Dibujar Borde Sombrío Lunar
-    ctx.strokeStyle = "rgba(15, 23, 42, 0.8)";
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    // Destello "Anillo de Diamante" al rozar la totalidad
     if (dist >= 3 && dist < 12) {
-      const diamondX = cx + ((moonX - cx) / dist) * r;
-      const diamondY = cy + ((moonY - cy) / dist) * r;
-
-      const dGrad = ctx.createRadialGradient(diamondX, diamondY, 1, diamondX, diamondY, 18);
-      dGrad.addColorStop(0, "#ffffff");
-      dGrad.addColorStop(0.5, "#fbbf24");
-      dGrad.addColorStop(1, "transparent");
-
-      ctx.fillStyle = dGrad;
-      ctx.beginPath();
-      ctx.arc(diamondX, diamondY, 18, 0, Math.PI * 2);
-      ctx.fill();
+      const dx = cx+((moonX-cx)/dist)*r, dy = cy+((moonY-cy)/dist)*r;
+      const dg = ctx.createRadialGradient(dx, dy, 1, dx, dy, 18);
+      dg.addColorStop(0, "#ffffff"); dg.addColorStop(0.5, "#fbbf24"); dg.addColorStop(1, "transparent");
+      ctx.fillStyle = dg; ctx.beginPath(); ctx.arc(dx, dy, 18, 0, Math.PI*2); ctx.fill();
     }
 
-    // Actualizar Subtítulos explicativos según el progreso
     if (subtitleText) {
-      let activeSub = subtitles[0].text;
-      for (let s of subtitles) {
-        if (progress >= s.p) activeSub = s.text;
-      }
+      const subs = i18n.currentLang === "es" ? subtitlesES : subtitlesEN;
+      let activeSub = subs[0].text;
+      for (let s of subs) { if (progress >= s.p) activeSub = s.text; }
       subtitleText.innerText = activeSub;
     }
 
-    // Avanzar animación en bucle infinito
     progress += 0.0018;
     if (progress > 1) progress = 0;
-
     animId = requestAnimationFrame(drawSimulatedEclipse);
   }
 
-  // Iniciar bucle de dibujo
   drawSimulatedEclipse();
 
-  // Selector de canal (Simulador Canvas o YouTube Embed)
   if (channelSelect && iframe && subtitleOverlay) {
     channelSelect.addEventListener("change", (e) => {
-      const val = e.target.value;
-      if (val === "canvas") {
-        iframe.classList.add("hidden");
-        canvas.classList.remove("hidden");
-        subtitleOverlay.classList.remove("hidden");
-        if (statusText) statusText.innerText = "📚 Simulador Animado Activo (12-Ago-2026)";
-      } else if (val === "youtube") {
-        canvas.classList.add("hidden");
-        subtitleOverlay.classList.add("hidden");
+      if (e.target.value === "canvas") {
+        iframe.classList.add("hidden"); canvas.classList.remove("hidden"); subtitleOverlay.classList.remove("hidden");
+        if (statusText) statusText.innerText = i18n.t("simStatus");
+      } else {
+        canvas.classList.add("hidden"); subtitleOverlay.classList.add("hidden");
         iframe.src = "https://www.youtube-nocookie.com/embed/9Auq9mYxFEE?autoplay=1&mute=1";
         iframe.classList.remove("hidden");
-        if (statusText) statusText.innerText = "🔴 Transmitiendo YouTube Live en Directo";
+        if (statusText) statusText.innerText = "🔴 YouTube Live";
       }
     });
   }
 
-  // Botón Minimizar / Maximizar
-  if (btnMin && widgetBody) {
-    btnMin.addEventListener("click", () => {
-      widget.classList.toggle("minimized");
-    });
-  }
-
-  // Botón Cerrar
-  if (btnClose) {
-    btnClose.addEventListener("click", () => {
-      widget.classList.add("hidden");
-      if (animId) cancelAnimationFrame(animId);
-    });
-  }
+  if (btnMin) btnMin.addEventListener("click", () => widget.classList.toggle("minimized"));
+  if (btnClose) btnClose.addEventListener("click", () => widget.classList.add("hidden"));
 }
 
-// Abrir Modal Interactivo Ficha Completa con Imagen Característica Garantizada y Carta Astral
+// Open Full-Screen Modal
 function openLocationModal(loc) {
+  const T = (k, p) => i18n.t(k, p);
   const modal = document.getElementById("location-modal");
   const modalTitle = document.getElementById("modal-location-title");
   const modalSub = document.getElementById("modal-location-province");
@@ -298,162 +286,57 @@ function openLocationModal(loc) {
   const modalBody = document.getElementById("modal-body-content");
   const modalHeroWrapper = document.getElementById("modal-hero-wrapper");
   const modalHeroImg = document.getElementById("modal-hero-img");
-
   if (!modal || !modalTitle || !modalBody) return;
 
   modalTitle.innerText = loc.name;
-  modalSub.innerText = `Provincia: ${loc.province} | Duración Totalidad: ${loc.timeline.formattedDuration}`;
+  modalSub.innerText = `${T("province")}: ${loc.province} | ${loc.timeline.formattedDuration} ${T("durationOf")}`;
 
-  // Cargar imagen de cabecera con fallback garantizado
   if (modalHeroWrapper && modalHeroImg) {
-    const imgSrc = loc.imageUrl || GLOBAL_FALLBACK_IMAGE;
     modalHeroImg.onerror = () => { modalHeroImg.src = GLOBAL_FALLBACK_IMAGE; };
-    modalHeroImg.src = imgSrc;
+    modalHeroImg.src = loc.imageUrl || GLOBAL_FALLBACK_IMAGE;
     modalHeroWrapper.classList.remove("hidden");
   }
 
-  if (loc.isTop10 && modalVipBadge) {
-    modalVipBadge.classList.remove("hidden");
-  } else if (modalVipBadge) {
-    modalVipBadge.classList.add("hidden");
+  if (modalVipBadge) {
+    modalVipBadge.innerText = T("vipBadge");
+    loc.isTop10 ? modalVipBadge.classList.remove("hidden") : modalVipBadge.classList.add("hidden");
   }
 
-  // Generar efemérides y carta astral completas
   const liveUrls = realAPIs.generateLiveBookingSearchUrl(loc.name, loc.coords[0], loc.coords[1]);
   const astroData = realAPIs.calculateRealAstrologyEphemeris(loc.coords[0], loc.coords[1], loc.name);
 
   let dishesHTML = "";
-  if (loc.whatToEat?.dishes) {
-    loc.whatToEat.dishes.forEach((d) => dishesHTML += `<li>🍴 <b>${d}</b></li>`);
-  }
+  if (loc.whatToEat?.dishes) loc.whatToEat.dishes.forEach((d) => dishesHTML += `<li>🍴 <b>${d}</b></li>`);
 
   let restHTML = "";
-  if (loc.whereToEat) {
-    loc.whereToEat.forEach((r) => {
-      restHTML += `
-        <div class="restaurant-card">
-          <div class="restaurant-header">
-            <span class="restaurant-name">${r.name}</span>
-            <span class="restaurant-price">${r.priceRange}</span>
-          </div>
-          <div class="restaurant-sub">👨‍🍳 <b>Tipo:</b> ${r.type} | ⭐ <b>Especialidad:</b> ${r.specialty}</div>
-          <a href="${r.link}" target="_blank" rel="noopener" class="btn-book">Reservar Mesa ↗</a>
-        </div>
-      `;
-    });
-  }
+  if (loc.whereToEat) loc.whereToEat.forEach((r) => {
+    restHTML += `<div class="restaurant-card"><div class="restaurant-header"><span class="restaurant-name">${r.name}</span><span class="restaurant-price">${r.priceRange}</span></div><div class="restaurant-sub">${T("whereToEatType", {type: r.type, spec: r.specialty})}</div><a href="${r.link}" target="_blank" rel="noopener" class="btn-book">${T("bookTable")}</a></div>`;
+  });
 
   let spotsHTML = "";
-  if (loc.publicObservationSpots) {
-    loc.publicObservationSpots.forEach((spot) => {
-      const optTime = spot.optimalTime || `${loc.timeline.totalityStart} - ${loc.timeline.totalityEnd}`;
-      spotsHTML += `
-        <div class="spot-card">
-          <div class="spot-name">${spot.name}</div>
-          <div class="spot-desc">${spot.desc}</div>
-          <div class="spot-optimal-badge" style="background: rgba(251, 191, 36, 0.15); border: 1px solid #fbbf24; color: #fbbf24; padding: 4px 8px; border-radius: 4px; margin: 4px 0; font-size: 0.8rem;">
-            ⏰ <b>Hora óptima:</b> ${optTime} | 🚗 <b>Llegada recomendada:</b> ${spot.recommendedArrival || "17:30 CEST"}
-          </div>
-        </div>
-      `;
-    });
-  }
+  if (loc.publicObservationSpots) loc.publicObservationSpots.forEach((spot) => {
+    const optTime = spot.optimalTime || `${loc.timeline.totalityStart} - ${loc.timeline.totalityEnd}`;
+    spotsHTML += `<div class="spot-card"><div class="spot-name">${spot.name}</div><div class="spot-desc">${spot.desc}</div><div class="spot-optimal-badge" style="background:rgba(251,191,36,0.15);border:1px solid #fbbf24;color:#fbbf24;padding:4px 8px;border-radius:4px;margin:4px 0;font-size:0.8rem;">${T("optimalTime", {time: optTime})} | ${T("arrivalRecommended", {arrival: spot.recommendedArrival || "17:30 CEST"})}</div></div>`;
+  });
 
   modalBody.innerHTML = `
-    <!-- INSIGNIA DESTACADA MÁXIMO -->
-    <div class="exact-time-banner">
-      <span class="exact-time-icon">🌟</span>
-      <div>
-        <div class="exact-time-title">HORA EXACTA DE MÁXIMA VISIBILIDAD:</div>
-        <div class="exact-time-clock">${loc.timeline.totalityMax} (Fase C2-C3)</div>
-      </div>
-    </div>
-
-    <!-- 1. CARTA ASTRAL DEL ECLIPSE (RUEDA INTERACTIVA SVG & CASAS) -->
-    <div>
-      <div class="modal-section-title">🔮 Carta Astral del Eclipse en ${loc.name}</div>
-      <div class="astrology-modal-grid">
-        <div class="astro-chart-box">
-          ${astroData.chartSVG}
-        </div>
-        <div class="astro-details-box">
-          <div class="astro-card-title">📜 Posiciones Celestiales Exactas:</div>
-          <p>☀️ <b>Sol & 🌑 Luna:</b> Conjunción en <span class="gold-text">${astroData.zodiacDegree}</span></p>
-          <p>📐 <b>Ascendente (ASC):</b> ${astroData.ascendant}</p>
-          <p>🏛️ <b>Medio Cielo (MC):</b> ${astroData.midheaven}</p>
-          <p>⭐ <b>Estrella Fija:</b> ${astroData.regulusDistance}</p>
-          <p>🌅 <b>Horizonte WNW:</b> ${astroData.horizonElevation} a ${astroData.azimuth}</p>
-          <div class="mantra-box">
-            <span class="mantra-title">✨ Afirmación Cósmica:</span>
-            <p class="mantra-text">${astroData.mantra}</p>
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:10px; font-size:0.85rem; color:#94a3b8; line-height:1.4;">
-        ${astroData.astrologicalInsight}
-      </div>
-    </div>
-
-    <!-- 2. ASTRONOMÍA -->
-    <div>
-      <div class="modal-section-title">⏱️ Cronograma Astronómico al Segundo</div>
-      <div class="info-grid">
-        <div class="info-card"><span class="info-label">Inicio Parcial (C1)</span><span class="info-value">${loc.timeline.partialStart}</span></div>
-        <div class="info-card highlight-card"><span class="info-label">Inicio Totalidad (C2)</span><span class="info-value gold-text">${loc.timeline.totalityStart}</span></div>
-        <div class="info-card highlight-card"><span class="info-label">🌟 MÁXIMO</span><span class="info-value gold-text">${loc.timeline.totalityMax}</span></div>
-        <div class="info-card"><span class="info-label">Fin Totalidad (C3)</span><span class="info-value">${loc.timeline.totalityEnd}</span></div>
-        <div class="info-card"><span class="info-label">Puesta de Sol (C4)</span><span class="info-value">${loc.timeline.sunset}</span></div>
-        <div class="info-card"><span class="info-label">Altura / Azimut Sol</span><span class="info-value">${loc.timeline.sunAltitude} / ${loc.timeline.sunAzimuth}</span></div>
-      </div>
-    </div>
-
-    <!-- 3. GASTRONOMÍA Y RESTAURANTES -->
-    <div class="modal-two-col">
-      <div class="food-card">
-        <div class="food-title">🍲 Qué Comer en ${loc.name}</div>
-        <ul class="food-list">${dishesHTML}</ul>
-        <div style="margin-top:8px; font-size:0.8rem; color:#fbbf24;">🍷 <b>Bebida:</b> ${loc.whatToEat?.drinks || "Vino local"}</div>
-      </div>
-      <div>
-        <div class="food-title">🍽️ Dónde Comer</div>
-        ${restHTML}
-      </div>
-    </div>
-
-    <!-- 4. MIRADORES Y LOGÍSTICA -->
-    <div>
-      <div class="modal-section-title">📍 Miradores Públicos y Hora Óptima de Llegada</div>
-      ${spotsHTML}
-      <div class="parking-box" style="margin-top:8px;">
-        <div class="parking-title">🅿️ Aparcamiento & Tráfico</div>
-        <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;"><b>Acceso principal:</b> ${loc.parkingLogistics.mainArea} | <b>Aviso:</b> ${loc.parkingLogistics.capacityNote}</p>
-      </div>
-    </div>
-
-    <!-- 5. ALOJAMIENTOS & MOTORES DE RESERVA -->
-    <div>
-      <div class="modal-section-title">🏨 Motores Directos de Reserva de Hospedaje</div>
-      <div class="live-hotel-links">
-        <a href="${liveUrls.bookingUrl}" target="_blank" rel="noopener" class="btn-live-api">Buscar en Booking.com ↗</a>
-        <a href="${liveUrls.googleHotelsUrl}" target="_blank" rel="noopener" class="btn-live-api">Google Hotels GPS ↗</a>
-        <a href="${liveUrls.kayakUrl}" target="_blank" rel="noopener" class="btn-live-api">Kayak ↗</a>
-      </div>
-    </div>
+    <div class="exact-time-banner"><span class="exact-time-icon">🌟</span><div><div class="exact-time-title">${T("modalMaxTitle")}</div><div class="exact-time-clock">${loc.timeline.totalityMax} (C2-C3)</div></div></div>
+    <div><div class="modal-section-title">${T("modalAstroTitle", {location: loc.name})}</div><div class="astrology-modal-grid"><div class="astro-chart-box">${astroData.chartSVG}</div><div class="astro-details-box"><div class="astro-card-title">${T("astroCelestial")}</div><p>${T("astroSunMoon")} <span class="gold-text">${astroData.zodiacDegree}</span></p><p>${T("astroAsc")} ${astroData.ascendant}</p><p>${T("astroMC")} ${astroData.midheaven}</p><p>${T("astroStar")} ${astroData.regulusDistance}</p><p>${T("astroHorizon")} ${astroData.horizonElevation} / ${astroData.azimuth}</p><div class="mantra-box"><span class="mantra-title">${T("astroMantra")}</span><p class="mantra-text">${astroData.mantra}</p></div></div></div><div style="margin-top:10px;font-size:0.85rem;color:#94a3b8;line-height:1.4;">${astroData.astrologicalInsight}</div></div>
+    <div><div class="modal-section-title">${T("modalTimeline")}</div><div class="info-grid"><div class="info-card"><span class="info-label">${T("partialStart")}</span><span class="info-value">${loc.timeline.partialStart}</span></div><div class="info-card highlight-card"><span class="info-label">${T("totalityStart")}</span><span class="info-value gold-text">${loc.timeline.totalityStart}</span></div><div class="info-card highlight-card"><span class="info-label">${T("maximum")}</span><span class="info-value gold-text">${loc.timeline.totalityMax}</span></div><div class="info-card"><span class="info-label">${T("totalityEnd")}</span><span class="info-value">${loc.timeline.totalityEnd}</span></div><div class="info-card"><span class="info-label">${T("sunset")}</span><span class="info-value">${loc.timeline.sunset}</span></div><div class="info-card"><span class="info-label">${T("altAzimuth")}</span><span class="info-value">${loc.timeline.sunAltitude} / ${loc.timeline.sunAzimuth}</span></div></div></div>
+    <div class="modal-two-col"><div class="food-card"><div class="food-title">${T("modalGastro", {location: loc.name})}</div><ul class="food-list">${dishesHTML}</ul><div style="margin-top:8px;font-size:0.8rem;color:#fbbf24;">${T("whatToEatDrink", {drink: loc.whatToEat?.drinks || "Local wine"})}</div></div><div><div class="food-title">${T("modalRestaurants")}</div>${restHTML}</div></div>
+    <div><div class="modal-section-title">${T("modalSpots")}</div>${spotsHTML}<div class="parking-box" style="margin-top:8px;"><div class="parking-title">${T("modalParking")}</div><p style="font-size:0.8rem;color:#94a3b8;margin-top:4px;">${T("modalParkingAccess", {area: loc.parkingLogistics.mainArea, note: loc.parkingLogistics.capacityNote})}</p></div></div>
+    <div><div class="modal-section-title">${T("modalHotels")}</div><div class="live-hotel-links"><a href="${liveUrls.bookingUrl}" target="_blank" rel="noopener" class="btn-live-api">Booking.com ↗</a><a href="${liveUrls.googleHotelsUrl}" target="_blank" rel="noopener" class="btn-live-api">Google Hotels ↗</a><a href="${liveUrls.kayakUrl}" target="_blank" rel="noopener" class="btn-live-api">Kayak ↗</a></div></div>
   `;
-
   modal.classList.remove("hidden");
 }
 
-// Cerrar Modal
 function closeLocationModal() {
   document.getElementById("location-modal")?.classList.add("hidden");
 }
 
-// Poblar selector de origen para el planificador de rutas
 function populateOriginSelector() {
   const select = document.getElementById("route-origin-select");
   if (!select) return;
-
   select.innerHTML = "";
   ECLIPSE_DATA.origins.forEach((orig) => {
     const opt = document.createElement("option");
@@ -463,7 +346,6 @@ function populateOriginSelector() {
   });
 }
 
-// Poblar lista de lugares para búsqueda rápida (50 municipios + 10 VIP)
 function populateLocationSearch() {
   const searchInput = document.getElementById("location-search");
   const listContainer = document.getElementById("search-results-list");
@@ -474,16 +356,13 @@ function populateLocationSearch() {
     const filtered = ECLIPSE_DATA.locations.filter(
       (l) => l.name.toLowerCase().includes(filterText.toLowerCase()) || l.province.toLowerCase().includes(filterText.toLowerCase())
     );
-
     filtered.forEach((loc) => {
       const idx = ECLIPSE_DATA.locations.findIndex((item) => item.id === loc.id);
       const itemElem = document.createElement("div");
       itemElem.className = `search-item-card ${loc.isTop10 ? 'search-item-vip' : ''}`;
       itemElem.innerHTML = `
-        <div class="search-item-title">
-          ${loc.isTop10 ? '⭐ [VIP TOP 10] ' : ''}${loc.name}
-        </div>
-        <div class="search-item-sub">🌟 Máximo: <b style="color:#fbbf24">${loc.timeline.totalityMax}</b> | Duración: ${loc.timeline.formattedDuration}</div>
+        <div class="search-item-title">${loc.isTop10 ? '⭐ [VIP TOP 10] ' : ''}${loc.name}</div>
+        <div class="search-item-sub">${i18n.t("popupMax")} <b style="color:#fbbf24">${loc.timeline.totalityMax}</b> | ${loc.timeline.formattedDuration}</div>
       `;
       itemElem.onclick = () => {
         mapManager.selectLocationByIndex(idx);
@@ -495,317 +374,181 @@ function populateLocationSearch() {
   };
 
   renderList();
-
-  searchInput.addEventListener("input", (e) => {
-    document.getElementById("search-dropdown")?.classList.remove("hidden");
-    renderList(e.target.value);
-  });
-
-  searchInput.addEventListener("focus", () => {
-    document.getElementById("search-dropdown")?.classList.remove("hidden");
-  });
+  searchInput.addEventListener("input", (e) => { document.getElementById("search-dropdown")?.classList.remove("hidden"); renderList(e.target.value); });
+  searchInput.addEventListener("focus", () => { document.getElementById("search-dropdown")?.classList.remove("hidden"); });
 }
 
-// Mostrar panel de la Vista General de España
 function showGeneralViewPanel() {
+  const T = (k, p) => i18n.t(k, p);
   const count = ECLIPSE_DATA.locations.length;
-  document.getElementById("detail-title").innerText = "España en la Franja de Totalidad";
-  document.getElementById("detail-province").innerText = `${count} Municipios dentro de la Franja | 10 Puntos VIP Top Destacados`;
-  document.getElementById("detail-duration-badge").innerText = "12 de Agosto de 2026";
-  document.getElementById("tour-counter").innerText = "Vista General";
+  document.getElementById("detail-title").innerText = T("generalTitle");
+  document.getElementById("detail-province").innerText = T("generalSub", { count });
+  document.getElementById("detail-duration-badge").innerText = T("generalDate");
+  document.getElementById("tour-counter").innerText = T("tourGeneralView");
   document.getElementById("exact-time-banner")?.classList.add("hidden");
   document.getElementById("detail-vip-badge")?.classList.add("hidden");
   document.getElementById("detail-hero-wrapper")?.classList.add("hidden");
 
-  const generalHTML = `
-    <div class="general-view-card">
-      <h3 class="general-view-title">☀️ viveElEclipse2026</h3>
-      <p class="general-view-desc">
-        Explora los <b>${count} municipios ubicados dentro de la Franja de Totalidad</b>.
-        Revisa la <b>Carta Astral del Eclipse en cada punto</b> y los <b>10 Puntos VIP Top destacados en dorado ⭐</b>.
-      </p>
-    </div>
-  `;
-
-  document.getElementById("tab-astro-content").innerHTML = generalHTML;
-  document.getElementById("tab-route-content").innerHTML = generalHTML;
-  document.getElementById("tab-hotels-content").innerHTML = generalHTML;
-  document.getElementById("tab-todo-content").innerHTML = generalHTML;
-  document.getElementById("tab-what-to-eat-content").innerHTML = generalHTML;
-  document.getElementById("tab-where-to-eat-content").innerHTML = generalHTML;
-  document.getElementById("tab-logistics-content").innerHTML = generalHTML;
-  document.getElementById("tab-astrology-content").innerHTML = generalHTML;
+  const html = `<div class="general-view-card"><h3 class="general-view-title">${T("generalViewTitle")}</h3><p class="general-view-desc">${T("generalViewDesc", { count })}</p></div>`;
+  ["tab-astro-content","tab-route-content","tab-hotels-content","tab-todo-content","tab-what-to-eat-content","tab-where-to-eat-content","tab-logistics-content","tab-astrology-content"].forEach(id => {
+    document.getElementById(id).innerHTML = html;
+  });
 }
 
-// Actualizar TODOS los paneles de la izquierda
 async function updateDetailPanels(loc) {
-  // 1. Título y Encabezado
-  document.getElementById("detail-title").innerText = loc.name;
-  document.getElementById("detail-province").innerText = `Provincia: ${loc.province}`;
-  document.getElementById("detail-duration-badge").innerText = `⏱️ ${loc.timeline.formattedDuration} de totalidad`;
+  const T = (k, p) => i18n.t(k, p);
 
-  // Banner con Imagen Característica en etiqueta img con onerror
+  document.getElementById("detail-title").innerText = loc.name;
+  document.getElementById("detail-province").innerText = `${T("province")}: ${loc.province}`;
+  document.getElementById("detail-duration-badge").innerText = `⏱️ ${loc.timeline.formattedDuration} ${T("durationOf")}`;
+
   const heroWrapper = document.getElementById("detail-hero-wrapper");
   const heroImg = document.getElementById("detail-hero-img");
   if (heroWrapper && heroImg) {
-    const imgSrc = loc.imageUrl || GLOBAL_FALLBACK_IMAGE;
     heroImg.onerror = () => { heroImg.src = GLOBAL_FALLBACK_IMAGE; };
-    heroImg.src = imgSrc;
+    heroImg.src = loc.imageUrl || GLOBAL_FALLBACK_IMAGE;
     heroWrapper.classList.remove("hidden");
   }
 
-  // Insignia VIP Top 10
   const vipBadge = document.getElementById("detail-vip-badge");
   if (vipBadge) {
-    if (loc.isTop10) {
-      vipBadge.classList.remove("hidden");
-    } else {
-      vipBadge.classList.add("hidden");
-    }
+    vipBadge.innerText = T("vipBadge");
+    loc.isTop10 ? vipBadge.classList.remove("hidden") : vipBadge.classList.add("hidden");
   }
 
-  // 2. INSIGNIA DESTACADA: HORA EXACTA DEL MÁXIMO
   const exactBanner = document.getElementById("exact-time-banner");
   const exactClock = document.getElementById("exact-time-value");
   if (exactBanner && exactClock) {
-    exactClock.innerText = `${loc.timeline.totalityMax} (Fase C2-C3)`;
+    exactClock.innerText = `${loc.timeline.totalityMax} (C2-C3)`;
     exactBanner.classList.remove("hidden");
   }
 
-  // 3. Pestaña 1: Astronomía
+  // Tab 1: Astronomy
   document.getElementById("tab-astro-content").innerHTML = `
     <div class="info-grid">
-      <div class="info-card"><span class="info-label">Inicio Parcial (C1)</span><span class="info-value">${loc.timeline.partialStart}</span></div>
-      <div class="info-card highlight-card"><span class="info-label">Inicio Totalidad (C2)</span><span class="info-value gold-text">${loc.timeline.totalityStart}</span></div>
-      <div class="info-card highlight-card"><span class="info-label">🌟 MÁXIMO DEL ECLIPSE</span><span class="info-value gold-text" style="font-size: 1.1rem;">${loc.timeline.totalityMax}</span></div>
-      <div class="info-card"><span class="info-label">Fin Totalidad (C3)</span><span class="info-value">${loc.timeline.totalityEnd}</span></div>
-      <div class="info-card"><span class="info-label">Puesta de Sol (C4)</span><span class="info-value">${loc.timeline.sunset}</span></div>
-      <div class="info-card"><span class="info-label">Altura & Azimut Sol</span><span class="info-value">${loc.timeline.sunAltitude} / ${loc.timeline.sunAzimuth}</span></div>
-    </div>
-  `;
+      <div class="info-card"><span class="info-label">${T("partialStart")}</span><span class="info-value">${loc.timeline.partialStart}</span></div>
+      <div class="info-card highlight-card"><span class="info-label">${T("totalityStart")}</span><span class="info-value gold-text">${loc.timeline.totalityStart}</span></div>
+      <div class="info-card highlight-card"><span class="info-label">${T("maximum")}</span><span class="info-value gold-text" style="font-size:1.1rem;">${loc.timeline.totalityMax}</span></div>
+      <div class="info-card"><span class="info-label">${T("totalityEnd")}</span><span class="info-value">${loc.timeline.totalityEnd}</span></div>
+      <div class="info-card"><span class="info-label">${T("sunset")}</span><span class="info-value">${loc.timeline.sunset}</span></div>
+      <div class="info-card"><span class="info-label">${T("altAzimuth")}</span><span class="info-value">${loc.timeline.sunAltitude} / ${loc.timeline.sunAzimuth}</span></div>
+    </div>`;
 
-  // 4. Pestaña 2: Planificador de Ruta
+  // Tab 2: Route
   updateRoutePlannerView(loc);
 
-  // 5. Pestaña 3: Alojamientos
+  // Tab 3: Hotels
   const liveUrls = realAPIs.generateLiveBookingSearchUrl(loc.name, loc.coords[0], loc.coords[1]);
-  let hotelHTML = `
-    <div class="hotel-live-api-box">
-      <div class="hotel-api-title">🌐 Motores Directos de Reserva de Hospedaje (12-13 Agosto 2026)</div>
-      <p style="font-size:0.8rem;">Buscar plazas de alojamiento en tiempo real para las coordenadas de ${loc.name}:</p>
-      <div class="live-hotel-links">
-        <a href="${liveUrls.bookingUrl}" target="_blank" rel="noopener" class="btn-live-api">Booking.com ↗</a>
-        <a href="${liveUrls.googleHotelsUrl}" target="_blank" rel="noopener" class="btn-live-api">Google Hotels GPS ↗</a>
-        <a href="${liveUrls.kayakUrl}" target="_blank" rel="noopener" class="btn-live-api">Kayak ↗</a>
-      </div>
-    </div>
-    <div id="osm-hotels-container" class="hotels-grid">
-      <div class="section-subtitle">📡 Consultando OpenStreetMap API para encontrar establecimientos turísticos reales cerca de ${loc.name}...</div>
-    </div>
-  `;
-  document.getElementById("tab-hotels-content").innerHTML = hotelHTML;
+  document.getElementById("tab-hotels-content").innerHTML = `
+    <div class="hotel-live-api-box"><div class="hotel-api-title">${T("hotelApiTitle")}</div><p style="font-size:0.8rem;">${T("hotelApiDesc", {location: loc.name})}</p><div class="live-hotel-links"><a href="${liveUrls.bookingUrl}" target="_blank" rel="noopener" class="btn-live-api">Booking.com ↗</a><a href="${liveUrls.googleHotelsUrl}" target="_blank" rel="noopener" class="btn-live-api">Google Hotels ↗</a><a href="${liveUrls.kayakUrl}" target="_blank" rel="noopener" class="btn-live-api">Kayak ↗</a></div></div>
+    <div id="osm-hotels-container"><div class="section-subtitle">${T("hotelOsmQuerying", {location: loc.name})}</div></div>`;
 
   realAPIs.fetchRealOSMAccommodations(loc.coords[0], loc.coords[1]).then((osmHotels) => {
     const container = document.getElementById("osm-hotels-container");
     if (!container) return;
-
     if (osmHotels && osmHotels.length > 0) {
-      let osmHTML = `<div class="section-subtitle">🏨 Estabilidad de Hospedaje en Tiempo Real (OpenStreetMap Live):</div>`;
+      let html = `<div class="section-subtitle">${T("hotelOsmTitle")}</div>`;
       osmHotels.forEach((h) => {
-        osmHTML += `
-          <div class="hotel-card">
-            <div class="hotel-header"><span class="hotel-name">${h.name}</span><span class="hotel-type">${h.type}</span></div>
-            <div class="hotel-body"><span class="hotel-price">📏 A ${h.distanceKm} km del centro</span><span class="badge badge-success">Localizado OSM</span></div>
-            ${h.website ? `<a href="${h.website}" target="_blank" rel="noopener" class="btn-book">Sitio Web Oficial ↗</a>` : `<a href="${h.osmUrl}" target="_blank" rel="noopener" class="btn-book">Ver en OpenStreetMap ↗</a>`}
-          </div>
-        `;
+        html += `<div class="hotel-card"><div class="hotel-header"><span class="hotel-name">${h.name}</span><span class="hotel-type">${h.type}</span></div><div class="hotel-body"><span class="hotel-price">📏 ${h.distanceKm} km</span><span class="badge badge-success">${T("hotelLocated")}</span></div>${h.website ? `<a href="${h.website}" target="_blank" rel="noopener" class="btn-book">${T("hotelOfficialSite")}</a>` : `<a href="${h.osmUrl}" target="_blank" rel="noopener" class="btn-book">${T("hotelViewOSM")}</a>`}</div>`;
       });
-      container.innerHTML = osmHTML;
+      container.innerHTML = html;
     } else {
-      let fallbackHTML = `<div class="section-subtitle">🏨 Alojamientos recomendados en ${loc.name}:</div>`;
+      let html = `<div class="section-subtitle">${T("hotelRecommended", {location: loc.name})}</div>`;
       loc.accommodations.forEach((h) => {
-        fallbackHTML += `
-          <div class="hotel-card">
-            <div class="hotel-header"><span class="hotel-name">${h.name}</span><span class="hotel-type">${h.type}</span></div>
-            <div class="hotel-body"><span class="hotel-price">${h.priceRange}</span><span class="badge badge-${h.availabilityBadge}">${h.availabilityStatus}</span></div>
-            <a href="${h.link}" target="_blank" rel="noopener" class="btn-book">Consultar disponibilidad ↗</a>
-          </div>
-        `;
+        html += `<div class="hotel-card"><div class="hotel-header"><span class="hotel-name">${h.name}</span><span class="hotel-type">${h.type}</span></div><div class="hotel-body"><span class="hotel-price">${h.priceRange}</span><span class="badge badge-${h.availabilityBadge}">${h.availabilityStatus}</span></div><a href="${h.link}" target="_blank" rel="noopener" class="btn-book">${T("hotelCheckAvail")}</a></div>`;
       });
-      container.innerHTML = fallbackHTML;
+      container.innerHTML = html;
     }
   });
 
-  // 6. Pestaña 4: Qué Hacer
+  // Tab 4: Activities
   document.getElementById("tab-todo-content").innerHTML = `
     <div class="activity-timeline">
-      <div class="activity-card"><div class="activity-time">🌅 Mañana en ${loc.name}</div><div class="activity-desc">${loc.whatToDo.morning}</div></div>
-      <div class="activity-card"><div class="activity-time">☀️ Tarde (Pre-Eclipse)</div><div class="activity-desc">${loc.whatToDo.afternoon}</div></div>
-      <div class="activity-card highlight-activity"><div class="activity-time">🌑 🌟 Momento del Máximo (${loc.timeline.totalityMax})</div><div class="activity-desc">${loc.whatToDo.eclipseMoment}</div></div>
-      <div class="activity-card"><div class="activity-time">🌌 Noche Post-Eclipse</div><div class="activity-desc">${loc.whatToDo.night}</div></div>
-    </div>
-  `;
+      <div class="activity-card"><div class="activity-time">${T("actMorning", {location: loc.name})}</div><div class="activity-desc">${loc.whatToDo.morning}</div></div>
+      <div class="activity-card"><div class="activity-time">${T("actAfternoon")}</div><div class="activity-desc">${loc.whatToDo.afternoon}</div></div>
+      <div class="activity-card highlight-activity"><div class="activity-time">${T("actEclipse", {time: loc.timeline.totalityMax})}</div><div class="activity-desc">${loc.whatToDo.eclipseMoment}</div></div>
+      <div class="activity-card"><div class="activity-time">${T("actNight")}</div><div class="activity-desc">${loc.whatToDo.night}</div></div>
+    </div>`;
 
-  // 7. Pestaña 5: QUÉ COMER
-  let eatHTML = `
-    <div class="food-card">
-      <div class="food-title">🍲 Platos Estrella y Especialidades Tradicionales de ${loc.name}:</div>
-      <ul class="food-list">
-  `;
-  if (loc.whatToEat?.dishes) {
-    loc.whatToEat.dishes.forEach((dish) => {
-      eatHTML += `<li>🍴 <b>${dish}</b></li>`;
-    });
-  }
-  eatHTML += `
-      </ul>
-      <div style="margin-top: 10px; font-size: 0.85rem; color: #fbbf24;">🍷 <b>Bebida:</b> ${loc.whatToEat?.drinks || "Vino local"}</div>
-    </div>
-  `;
+  // Tab 5: What to Eat
+  let eatHTML = `<div class="food-card"><div class="food-title">${T("whatToEatTitle", {location: loc.name})}</div><ul class="food-list">`;
+  if (loc.whatToEat?.dishes) loc.whatToEat.dishes.forEach((d) => eatHTML += `<li>🍴 <b>${d}</b></li>`);
+  eatHTML += `</ul><div style="margin-top:10px;font-size:0.85rem;color:#fbbf24;">${T("whatToEatDrink", {drink: loc.whatToEat?.drinks || "Local wine"})}</div></div>`;
   document.getElementById("tab-what-to-eat-content").innerHTML = eatHTML;
 
-  // 8. Pestaña 6: DÓNDE COMER
-  let restHTML = `<div class="section-subtitle">🍽️ Guía de Restaurantes y Mesones en ${loc.name}:</div>`;
-  if (loc.whereToEat && loc.whereToEat.length > 0) {
-    loc.whereToEat.forEach((rest) => {
-      restHTML += `
-        <div class="restaurant-card">
-          <div class="restaurant-header"><span class="restaurant-name">${rest.name}</span><span class="restaurant-price">${rest.priceRange}</span></div>
-          <div class="restaurant-sub">👨‍🍳 <b>Tipo:</b> ${rest.type} | ⭐ <b>Especialidad:</b> ${rest.specialty}</div>
-          <a href="${rest.link}" target="_blank" rel="noopener" class="btn-book" style="margin-top:6px; display:inline-block;">Reservar mesa ↗</a>
-        </div>
-      `;
-    });
-  }
+  // Tab 6: Where to Eat
+  let restHTML = `<div class="section-subtitle">${T("whereToEatTitle", {location: loc.name})}</div>`;
+  if (loc.whereToEat) loc.whereToEat.forEach((r) => {
+    restHTML += `<div class="restaurant-card"><div class="restaurant-header"><span class="restaurant-name">${r.name}</span><span class="restaurant-price">${r.priceRange}</span></div><div class="restaurant-sub">${T("whereToEatType", {type: r.type, spec: r.specialty})}</div><a href="${r.link}" target="_blank" rel="noopener" class="btn-book" style="margin-top:6px;display:inline-block;">${T("bookTable")}</a></div>`;
+  });
   document.getElementById("tab-where-to-eat-content").innerHTML = restHTML;
 
-  // 9. Pestaña 7: Miradores Públicos
-  let spotsHTML = `<div class="section-subtitle">📍 Miradores públicos de ${loc.name} despejados al W-NW:</div><div class="spots-list">`;
+  // Tab 7: Viewpoints/Logistics
+  let spotsHTML = `<div class="section-subtitle">${T("spotsTitle", {location: loc.name})}</div><div class="spots-list">`;
   loc.publicObservationSpots.forEach((spot) => {
     const optTime = spot.optimalTime || `${loc.timeline.totalityStart} - ${loc.timeline.totalityEnd}`;
-    spotsHTML += `
-      <div class="spot-card">
-        <div class="spot-name">${spot.name}</div>
-        <div class="spot-desc">${spot.desc}</div>
-        <div class="spot-optimal-badge" style="background: rgba(251, 191, 36, 0.15); border: 1px solid #fbbf24; color: #fbbf24; padding: 6px 10px; border-radius: 6px; margin: 6px 0; font-size: 0.8rem; font-weight: 600;">
-          ⏰ <b>Hora óptima:</b> ${optTime} <br> 🚗 <b>Llegada recomendada:</b> ${spot.recommendedArrival || "17:30 CEST"}
-        </div>
-        <div class="spot-meta">🅿️ Parking: ${spot.parkingNearby}</div>
-      </div>
-    `;
+    spotsHTML += `<div class="spot-card"><div class="spot-name">${spot.name}</div><div class="spot-desc">${spot.desc}</div><div class="spot-optimal-badge" style="background:rgba(251,191,36,0.15);border:1px solid #fbbf24;color:#fbbf24;padding:6px 10px;border-radius:6px;margin:6px 0;font-size:0.8rem;font-weight:600;">${T("optimalTime", {time: optTime})}<br>${T("arrivalRecommended", {arrival: spot.recommendedArrival || "17:30 CEST"})}</div><div class="spot-meta">🅿️ Parking: ${spot.parkingNearby}</div></div>`;
   });
-  spotsHTML += `</div>
-    <div class="parking-box">
-      <div class="parking-title">🅿️ Aparcamiento & Logística de Tráfico en ${loc.name}</div>
-      <div class="parking-details">
-        <p><b>Zona principal:</b> ${loc.parkingLogistics.mainArea}</p>
-        <p><b>Aviso:</b> ${loc.parkingLogistics.capacityNote}</p>
-        <p><b>Tráfico:</b> ${loc.parkingLogistics.trafficAdvice}</p>
-      </div>
-    </div>
-  `;
+  spotsHTML += `</div><div class="parking-box"><div class="parking-title">${T("parkingTitle", {location: loc.name})}</div><div class="parking-details"><p>${T("parkingMainArea", {area: loc.parkingLogistics.mainArea})}</p><p>${T("parkingNote", {note: loc.parkingLogistics.capacityNote})}</p><p>${T("parkingTraffic", {advice: loc.parkingLogistics.trafficAdvice})}</p></div></div>`;
   document.getElementById("tab-logistics-content").innerHTML = spotsHTML;
 
-  // 10. Pestaña 8: CARTA ASTRAL COMPLETA CON SVG INTERACTIVO Y MANTRA
+  // Tab 8: Astrology
   const astroData = realAPIs.calculateRealAstrologyEphemeris(loc.coords[0], loc.coords[1], loc.name);
   document.getElementById("tab-astrology-content").innerHTML = `
     <div class="astrology-container">
-      <div class="astro-chart-box" style="text-align:center; margin-bottom:12px;">
-        ${astroData.chartSVG}
-      </div>
-      <div class="astrology-header">
-        <div class="astrology-symbol">♌ 20°</div>
-        <div class="astrology-meta">
-          <div class="astro-degree">Grado Zodiacal: <b>${astroData.zodiacDegree}</b></div>
-          <div class="astro-star">Alineación: <b>${astroData.regulusDistance}</b></div>
-          <div class="astro-element">Ascendente: <b>${astroData.ascendant}</b></div>
-        </div>
-      </div>
-      <div class="astrology-reading">
-        <h4>🔮 Lectura Astrológica de la Carta Astral</h4>
-        <p>${astroData.astrologicalInsight}</p>
-        <div class="mantra-box" style="margin-top:10px;">
-          <span class="mantra-title">✨ Afirmación Cósmica:</span>
-          <p class="mantra-text">${astroData.mantra}</p>
-        </div>
-      </div>
-      <div class="history-box" style="margin-top:10px;">
-        <h4>🏛️ Historia y Leyenda Astronómica de ${loc.name}</h4>
-        <p>${loc.history}</p>
-      </div>
-    </div>
-  `;
+      <div class="astro-chart-box" style="text-align:center;margin-bottom:12px;">${astroData.chartSVG}</div>
+      <div class="astrology-header"><div class="astrology-symbol">♌ 20°</div><div class="astrology-meta"><div class="astro-degree">${T("zodiacDegree")}: <b>${astroData.zodiacDegree}</b></div><div class="astro-star">${T("alignment")}: <b>${astroData.regulusDistance}</b></div><div class="astro-element">${T("ascendant")}: <b>${astroData.ascendant}</b></div></div></div>
+      <div class="astrology-reading"><h4>${T("astroReading")}</h4><p>${astroData.astrologicalInsight}</p><div class="mantra-box" style="margin-top:10px;"><span class="mantra-title">${T("astroMantra")}</span><p class="mantra-text">${astroData.mantra}</p></div></div>
+      <div class="history-box" style="margin-top:10px;"><h4>${T("astroHistory", {location: loc.name})}</h4><p>${loc.history}</p></div>
+    </div>`;
 }
 
-// Actualizar vista del planificador de ruta
 function updateRoutePlannerView(loc) {
+  const T = (k, p) => i18n.t(k, p);
   const selectElem = document.getElementById("route-origin-select");
   const originVal = selectElem ? selectElem.value : "madrid";
-  const routeContentElem = document.getElementById("tab-route-content");
-
   let routeData = loc.routePlanner[originVal] || loc.routePlanner["madrid"];
   const originObj = ECLIPSE_DATA.origins.find((o) => o.id === originVal) || ECLIPSE_DATA.origins[0];
 
-  routeContentElem.innerHTML = `
-    <div class="route-planner-card">
-      <div class="route-header">
-        <span>🚩 Origen: <b>${originObj.name}</b></span><span>➔</span><span>🏁 Destino: <b>${loc.name}</b></span>
-      </div>
-      <div class="route-stats">
-        <div class="stat-box"><span class="stat-label">Distancia Estimada</span><span class="stat-value">${routeData.distanceKm} km</span></div>
-        <div class="stat-box"><span class="stat-label">Tiempo de Viaje</span><span class="stat-value gold-text">${routeData.travelTime}</span></div>
-      </div>
-      <div class="route-path-box">
-        <span class="route-label">🛣️ Ruta recomendada por carretera/tren:</span>
-        <div class="route-text">${routeData.route}</div>
-      </div>
-    </div>
-  `;
+  document.getElementById("tab-route-content").innerHTML = `
+    <div class="route-planner-card"><div class="route-header"><span>${T("routeOrigin", {origin: originObj.name})}</span><span>➔</span><span>${T("routeDestination", {dest: loc.name})}</span></div><div class="route-stats"><div class="stat-box"><span class="stat-label">${T("distanceEstimated")}</span><span class="stat-value">${routeData.distanceKm} km</span></div><div class="stat-box"><span class="stat-label">${T("travelTime")}</span><span class="stat-value gold-text">${routeData.travelTime}</span></div></div><div class="route-path-box"><span class="route-label">${T("routeRecommended")}</span><div class="route-text">${routeData.route}</div></div></div>`;
 }
 
-// Actualizar contador del tour "Caminar por la franja"
 function updateTourControls(index) {
-  const currentCounter = document.getElementById("tour-counter");
-  if (currentCounter) {
-    currentCounter.innerText = `Punto ${index + 1} / ${ECLIPSE_DATA.locations.length}`;
-  }
+  const el = document.getElementById("tour-counter");
+  if (el) el.innerText = i18n.t("tourCounter", { current: index + 1, total: ECLIPSE_DATA.locations.length });
 }
 
-// Configurar event listeners globales
 function setupEventListeners() {
-  // Menú Navegación en Cuadrícula
   const navCards = document.querySelectorAll(".nav-card");
   navCards.forEach((card) => {
-    card.addEventListener("click", () => {
+    const handleTabClick = (e) => {
+      e.preventDefault();
+      const targetCard = e.currentTarget;
+      const targetId = targetCard.getAttribute("data-tab");
       navCards.forEach((c) => c.classList.remove("active"));
-      card.classList.add("active");
-
-      const targetId = card.getAttribute("data-tab");
+      targetCard.classList.add("active");
       document.querySelectorAll(".tab-pane").forEach((pane) => pane.classList.remove("active"));
-      document.getElementById(targetId)?.classList.add("active");
-    });
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) {
+        targetPane.classList.add("active");
+        targetPane.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    };
+    card.addEventListener("click", handleTabClick);
+    card.addEventListener("touchend", handleTabClick);
   });
 
-  // Selector de origen del planificador
-  const routeSelect = document.getElementById("route-origin-select");
-  if (routeSelect) {
-    routeSelect.addEventListener("change", () => {
-      if (mapManager.activeLocation) {
-        updateRoutePlannerView(mapManager.activeLocation);
-      }
-    });
-  }
+  document.getElementById("route-origin-select")?.addEventListener("change", () => {
+    if (mapManager.activeLocation) updateRoutePlannerView(mapManager.activeLocation);
+  });
 
-  // Botones del Tour "Caminar por la franja"
   document.getElementById("btn-tour-prev")?.addEventListener("click", () => mapManager.walkPrev());
   document.getElementById("btn-tour-next")?.addEventListener("click", () => mapManager.walkNext());
   document.getElementById("btn-reset-view")?.addEventListener("click", () => mapManager.resetToGeneralView());
 
-  // Eventos de cierre del Modal
   document.getElementById("modal-close-btn")?.addEventListener("click", () => closeLocationModal());
   document.getElementById("location-modal")?.addEventListener("click", (e) => {
-    if (e.target.id === "location-modal") {
-      closeLocationModal();
-    }
+    if (e.target.id === "location-modal") closeLocationModal();
   });
 }
