@@ -43,6 +43,8 @@ body {
 
 /* Header General */
 .header-bar {
+  position: relative;
+  z-index: 10000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -923,7 +925,7 @@ body {
   bottom: 0;
   background: rgba(6, 7, 13, 0.88);
   backdrop-filter: blur(12px);
-  z-index: 10000;
+  z-index: 999999;
   display: flex;
   align-items: center;
   justify-content: center;

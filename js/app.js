@@ -54,16 +54,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // 9. Event listeners
   setupEventListeners();
 
-  // 10. Popup button delegation
+  // 10. Global delegated event listeners for popups, brand home link, and safety modal
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".popup-btn");
-    if (btn) {
-      const idx = parseInt(btn.getAttribute("data-index"), 10);
+    // Popup button
+    const popupBtn = e.target.closest(".popup-btn");
+    if (popupBtn) {
+      const idx = parseInt(popupBtn.getAttribute("data-index"), 10);
       if (!isNaN(idx) && ECLIPSE_DATA.locations[idx]) {
         const loc = ECLIPSE_DATA.locations[idx];
         mapManager.selectLocationByIndex(idx);
         openLocationModal(loc);
       }
+      return;
+    }
+
+    // Brand Title / Logo Home Link
+    if (e.target.closest("#brand-container") || e.target.closest("#brand-title") || e.target.closest(".clickable-home")) {
+      e.preventDefault();
+      mapManager.resetToGeneralView();
+      closeLocationModal();
+      closeSafetyModal();
+      if (window.innerWidth <= 768) {
+        switchMobileView("map");
+      }
+      return;
+    }
+
+    // Eye Safety Toggle Button
+    if (e.target.closest("#btn-safety-toggle") || e.target.closest(".btn-safety")) {
+      e.preventDefault();
+      openSafetyModal();
+      return;
+    }
+
+    // Safety Close Button
+    if (e.target.closest("#safety-close-btn")) {
+      closeSafetyModal();
+      return;
     }
   });
 
