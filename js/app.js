@@ -117,8 +117,36 @@ function applyStaticTranslations() {
     channelSelect.options[1].text = T("simYoutube");
   }
 
-  // Page title
-  document.title = T("brandTitle") + " - Interactive Totality Path Guide";
+  // Safety button
+  const safetyBtnLabel = document.getElementById("safety-btn-label");
+  if (safetyBtnLabel) safetyBtnLabel.innerText = T("safetyBtn");
+
+  const safetyTitle = document.getElementById("safety-modal-title");
+  if (safetyTitle) safetyTitle.innerText = T("safetyTitle");
+
+  const safetySub = document.getElementById("safety-modal-sub");
+  if (safetySub) safetySub.innerText = T("safetySub");
+
+  const safetyBody = document.getElementById("safety-modal-body");
+  if (safetyBody) safetyBody.innerHTML = T("safetyBody");
+
+  // Dynamic SEO & Open Graph Meta Tags Update
+  document.title = T("seoTitle");
+
+  const metaDesc = document.getElementById("meta-description");
+  if (metaDesc) metaDesc.setAttribute("content", T("seoDescription"));
+
+  const ogTitle = document.getElementById("og-title");
+  if (ogTitle) ogTitle.setAttribute("content", T("seoOgTitle"));
+
+  const ogDesc = document.getElementById("og-description");
+  if (ogDesc) ogDesc.setAttribute("content", T("seoOgDesc"));
+
+  const twTitle = document.getElementById("twitter-title");
+  if (twTitle) twTitle.setAttribute("content", T("seoOgTitle"));
+
+  const twDesc = document.getElementById("twitter-description");
+  if (twDesc) twDesc.setAttribute("content", T("seoOgDesc"));
 }
 
 // Mobile view switch
@@ -547,8 +575,42 @@ function setupEventListeners() {
   document.getElementById("btn-tour-next")?.addEventListener("click", () => mapManager.walkNext());
   document.getElementById("btn-reset-view")?.addEventListener("click", () => mapManager.resetToGeneralView());
 
+  // BRAND TITLE & LOGO CLICK: RETURN TO INITIAL MAP VIEW (HOME LINK)
+  const returnToHome = (e) => {
+    e.preventDefault();
+    mapManager.resetToGeneralView();
+    closeLocationModal();
+    closeSafetyModal();
+    if (window.innerWidth <= 768) {
+      switchMobileView("map");
+    }
+  };
+
+  const brandContainer = document.getElementById("brand-container");
+  if (brandContainer) {
+    brandContainer.addEventListener("click", returnToHome);
+    brandContainer.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") returnToHome(e);
+    });
+  }
+
+  // Safety Modal Listeners
+  document.getElementById("btn-safety-toggle")?.addEventListener("click", () => openSafetyModal());
+  document.getElementById("safety-close-btn")?.addEventListener("click", () => closeSafetyModal());
+  document.getElementById("safety-modal")?.addEventListener("click", (e) => {
+    if (e.target.id === "safety-modal") closeSafetyModal();
+  });
+
   document.getElementById("modal-close-btn")?.addEventListener("click", () => closeLocationModal());
   document.getElementById("location-modal")?.addEventListener("click", (e) => {
     if (e.target.id === "location-modal") closeLocationModal();
   });
+}
+
+function openSafetyModal() {
+  document.getElementById("safety-modal")?.classList.remove("hidden");
+}
+
+function closeSafetyModal() {
+  document.getElementById("safety-modal")?.classList.add("hidden");
 }

@@ -3,8 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>liveTheEclipse2026 - Interactive Guide to the Totality Path in Spain</title>
-  <meta name="description" content="Interactive map with 50 municipalities in the totality path: 10 Top VIP Points, What to Eat, Where to Eat, panoramic images, viewpoints and astral chart.">
+
+  <!-- Primary SEO Meta Tags (English Default) -->
+  <title>liveTheEclipse2026 - Total Solar Eclipse Spain August 12, 2026 | Interactive Map & Guide</title>
+  <meta name="title" content="liveTheEclipse2026 - Total Solar Eclipse Spain August 12, 2026 | Interactive Map & Guide">
+  <meta name="description" id="meta-description" content="Interactive map & guide to the Total Solar Eclipse of August 12, 2026 in Spain. Explore 50+ municipalities in the totality path (Barcelona, Valencia, Tarragona, Muxía), 60FPS eclipse simulator, astral charts, viewpoints, hotels, and traditional gastronomy.">
+  <meta name="keywords" content="total solar eclipse 2026, eclipse solar españa 2026, august 12 2026 eclipse, eclipse totality path spain, eclipse simulator, barcelona eclipse 2026, valencia eclipse 2026, tarragona eclipse, solar eclipse map spain">
+  <meta name="author" content="liveTheEclipse2026">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook / WhatsApp Sharing Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://livetheeclipse2026.com/">
+  <meta property="og:title" id="og-title" content="liveTheEclipse2026 - Total Solar Eclipse August 12, 2026 in Spain">
+  <meta property="og:description" id="og-description" content="Interactive guide to 50+ municipalities in the totality path across Spain. Includes 60FPS eclipse simulator, astral charts, public viewpoints, hotel booking engines, and traditional gastronomy.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1200&h=630&q=80">
+  <meta property="og:image:alt" content="Total Solar Eclipse Corona over Spain - August 12, 2026">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="liveTheEclipse2026">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_ES">
+
+  <!-- Twitter / X Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://livetheeclipse2026.com/">
+  <meta name="twitter:title" id="twitter-title" content="liveTheEclipse2026 - Total Solar Eclipse August 12, 2026 in Spain">
+  <meta name="twitter:description" id="twitter-description" content="Interactive map & guide to 50+ towns in the totality path across Spain. 60FPS simulator, astral charts, viewpoints, and hotels.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1200&h=630&q=80">
+
+  <!-- SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2306070d'/><circle cx='50' cy='50' r='30' fill='%23fbbf24'/><circle cx='46' cy='50' r='29' fill='%2306070d'/></svg>">
+
+  <!-- Schema.org Structured Data (Google Event Rich Snippet) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Total Solar Eclipse of August 12, 2026 in Spain",
+    "startDate": "2026-08-12T19:30:00+02:00",
+    "endDate": "2026-08-12T21:30:00+02:00",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "Place",
+      "name": "Totality Path across Spain (Barcelona, Valencia, Tarragona, A Coruña, Burgos, Sigüenza, Palma)",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "ES"
+      }
+    },
+    "image": [
+      "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1200&h=630&q=80"
+    ],
+    "description": "Interactive map and guide to view the Total Solar Eclipse of August 12, 2026 across Spain. Includes totality timings, public viewpoints, astral charts, and hotel booking engines.",
+    "organizer": {
+      "@type": "Organization",
+      "name": "liveTheEclipse2026",
+      "url": "https://livetheeclipse2026.com"
+    }
+  }
+  </script>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,7 +75,7 @@
 
   <!-- HEADER BAR & COUNTDOWN -->
   <header class="header-bar">
-    <div class="brand-container">
+    <div id="brand-container" class="brand-container clickable-home" title="Return to General View of Spain" role="button" tabindex="0">
       <div class="solar-logo"></div>
       <div>
         <h1 id="brand-title" class="brand-title">liveTheEclipse2026</h1>
@@ -25,6 +84,11 @@
     </div>
 
     <div class="header-right-actions">
+      <!-- EYE SAFETY BUTTON -->
+      <button id="btn-safety-toggle" class="btn-header-action btn-safety" title="Solar Eye Safety Guidelines">
+        👓 <span id="safety-btn-label">Eye Safety</span>
+      </button>
+
       <!-- LANGUAGE TOGGLE BUTTON -->
       <button id="btn-lang-toggle" class="btn-header-action btn-lang" title="Switch Language">
         🇪🇸 ES
@@ -227,6 +291,22 @@
         <button id="modal-close-btn" class="modal-close-btn" title="Close Card">&times;</button>
       </div>
       <div id="modal-body-content" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- EYE SAFETY MODAL -->
+  <div id="safety-modal" class="modal-overlay hidden">
+    <div class="modal-container glass-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <div>
+          <h2 id="safety-modal-title" class="modal-title">👓 Solar Eye Safety & ISO 12312-2 Certification</h2>
+          <div id="safety-modal-sub" class="modal-sub">Essential guidelines to safely view the Solar Eclipse of August 12, 2026</div>
+        </div>
+        <button id="safety-close-btn" class="modal-close-btn" title="Close">&times;</button>
+      </div>
+      <div id="safety-modal-body" class="modal-body">
+        <!-- Content inserted dynamically by i18n -->
+      </div>
     </div>
   </div>
 

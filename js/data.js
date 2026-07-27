@@ -157,6 +157,14 @@ var ECLIPSE_DATA = {
         43.263,
         -2.935
       ]
+    },
+    {
+      "id": "tarragona",
+      "name": "Tarragona",
+      "coords": [
+        41.1189,
+        1.2449
+      ]
     }
   ],
   "locations": [
@@ -8812,6 +8820,535 @@ var ECLIPSE_DATA = {
           "specialty": "Platos de cuchara y postres caseros tradicionales",
           "priceRange": "18€ - 30€",
           "link": "https://www.google.com/maps/search/Restaurantes+en+Daroca"
+        }
+      ]
+    },
+    {
+      "id": "barcelona-city",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Sagrada_Familia_01.jpg",
+      "name": "Barcelona & Montjuïc",
+      "province": "Barcelona (Cataluña)",
+      "coords": [
+        41.3851,
+        2.1734
+      ],
+      "timeline": {
+        "partialStart": "19:32:10 CEST",
+        "totalityStart": "20:28:30 CEST",
+        "totalityMax": "20:29:22 CEST",
+        "totalityEnd": "20:30:14 CEST",
+        "sunset": "21:05:00 CEST",
+        "formattedDuration": "1 min 44 seg",
+        "sunAltitude": "7.5°",
+        "sunAzimuth": "288° (WNW)"
+      },
+      "routePlanner": {
+        "madrid": {
+          "distanceKm": 620,
+          "travelTime": "2h 30m (AVE)",
+          "route": "AVE Madrid-Atocha ➔ Barcelona Sants / AP-7"
+        }
+      },
+      "whatToDo": {
+        "morning": "Basílica de la Sagrada Família y Passeig de Gràcia.",
+        "afternoon": "Castillo y Mirador de Montjuïc.",
+        "eclipseMoment": "Totalidad a 7.5° sobre el horizonte marítimo del Mediterráneo.",
+        "night": "Cena de tapas en El Born o la Barceloneta."
+      },
+      "publicObservationSpots": [
+        {
+          "name": "Castillo y Mirador del Alcalde (Montjuïc)",
+          "desc": "Vista 360° sin obstáculos hacia el oeste y el mar Mediterráneo.",
+          "parkingNearby": "Aparcamiento del Castell de Montjuïc (450 plazas)",
+          "optimalTime": "20:28:30 CEST - 20:30:14 CEST",
+          "recommendedArrival": "17:00 CEST"
+        },
+        {
+          "name": "Tibidabo & Templo del Sagrat Cor",
+          "desc": "Punto más alto de la ciudad (512m) con horizonte despejado absoluto.",
+          "parkingNearby": "Aparcamiento BSM Tibidabo (500 plazas)",
+          "optimalTime": "20:28:30 CEST - 20:30:14 CEST",
+          "recommendedArrival": "16:30 CEST"
+        },
+        {
+          "name": "Búnkers del Carmel (Turó de la Rovira)",
+          "desc": "Mirador panorámico emblemático de la ciudad frente al poniente solar.",
+          "parkingNearby": "Zona Guinardó (Acceso a pie)",
+          "optimalTime": "20:28:30 CEST - 20:30:14 CEST",
+          "recommendedArrival": "17:30 CEST"
+        },
+        {
+          "name": "Platja de Sant Sebastià / Espigón del Gas",
+          "desc": "Paseo marítimo llano ideal para observación directa sobre el agua.",
+          "parkingNearby": "Aparcamiento BSM Litoral Port (600 plazas)",
+          "optimalTime": "20:28:30 CEST - 20:30:14 CEST",
+          "recommendedArrival": "18:00 CEST"
+        },
+        {
+          "name": "Parc Güell - Plaza de la Naturaleza",
+          "desc": "Patrimonio UNESCO con vistas icónicas del perfil urbano barcelonés.",
+          "parkingNearby": "Aparcamiento Esperança / Carmel",
+          "optimalTime": "20:28:30 CEST - 20:30:14 CEST",
+          "recommendedArrival": "17:00 CEST"
+        }
+      ],
+      "parkingLogistics": {
+        "mainArea": "Aparcamiento BSM Montjuïc / Estació de Sants.",
+        "capacityNote": "Restricciones de tráfico en accesos a Montjuïc. Usar Funicular.",
+        "coordinates": "41.3635, 2.1652",
+        "trafficAdvice": "Recomendado Metro L2/L3 Paral·lel + Funicular de Montjuïc."
+      },
+      "accommodations": [
+        {
+          "name": "W Barcelona 5★",
+          "type": "Hotel Luxury de Playa",
+          "priceRange": "€€€€€",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Barcelona",
+          "availabilityStatus": "Alta Demanda",
+          "availabilityBadge": "warning"
+        },
+        {
+          "name": "Hotel Arts Barcelona 5★",
+          "type": "Gran Lujo Urbano",
+          "priceRange": "€€€€€",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Barcelona",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Hotel Boutique Plaza Cataluña",
+          "type": "Hotel Boutique Histórico",
+          "priceRange": "120€ - 210€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Barcelona",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Apartamentos Turísticos Franja Solar Barcelona",
+          "type": "Apartamentos Eixample",
+          "priceRange": "95€ - 170€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Barcelona",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Hostal & Posada Real de Barcelona",
+          "type": "Posada Central Barri Gòtic",
+          "priceRange": "70€ - 110€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Barcelona",
+          "availabilityStatus": "Últimas Plazas",
+          "availabilityBadge": "danger"
+        }
+      ],
+      "history": "Ciudad cosmopolita milenaria fundada como colonia romana Barcino, meca del Modernismo de Antoni Gaudí.",
+      "astrology": {
+        "zodiacDegree": "20° 18' Leo",
+        "fixedStar": "Regulus & Cor Leonis",
+        "element": "Fuego & Mar Mediterráneo",
+        "cosmicMeaning": "Vanguardia, creatividad audaz y resplandor solar sobre el Mediterráneo."
+      },
+      "isTop10": true,
+      "whatToEat": {
+        "dishes": [
+          "Paella Parellada / Fideuà de la Barceloneta",
+          "Pa amb Tomàquet con Jamón Ibérico",
+          "Esqueixada de Bacallà tradicional",
+          "Escalivada a la brasa con anchoas",
+          "Crema Catalana artesanal"
+        ],
+        "drinks": "Cava D.O. Penedès o Vino Blanco de Alella"
+      },
+      "whereToEat": [
+        {
+          "name": "Can Solé (Barceloneta)",
+          "type": "Cocina marinera centenaria",
+          "specialty": "Arroces y pescados frescos del puerto",
+          "priceRange": "€€€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Barcelona"
+        },
+        {
+          "name": "7 Portes",
+          "type": "Restaurante Histórico desde 1836",
+          "specialty": "Fideuà de marisco y cocina tradicional",
+          "priceRange": "€€€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Barcelona"
+        },
+        {
+          "name": "Restaurante Gastrobar Corona Solar",
+          "type": "Cocina de Autor & Maridaje",
+          "specialty": "Menú degustación temático Eclipse 2026",
+          "priceRange": "45€ - 70€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Barcelona"
+        },
+        {
+          "name": "El Xampanyet",
+          "type": "Taberna Tradicional de Cava y Tapas",
+          "specialty": "Anchoas artesanas y cava de la casa",
+          "priceRange": "€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Barcelona"
+        },
+        {
+          "name": "Casa de Comidas Abuela Rosa",
+          "type": "Cocina Casera Catalana",
+          "specialty": "Escudella y carnes a la brasa",
+          "priceRange": "18€ - 30€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Barcelona"
+        }
+      ]
+    },
+    {
+      "id": "tarragona",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Anfiteatro_romano_de_Tarragona%2C_Espa%C3%B1a%2C_2014-09-10%2C_DD_17-21_HDR.JPG",
+      "name": "Tarragona & Balcón del Mediterráneo",
+      "province": "Tarragona (Cataluña)",
+      "coords": [
+        41.1189,
+        1.2449
+      ],
+      "timeline": {
+        "partialStart": "19:32:00 CEST",
+        "totalityStart": "20:28:20 CEST",
+        "totalityMax": "20:29:12 CEST",
+        "totalityEnd": "20:30:04 CEST",
+        "sunset": "21:07:00 CEST",
+        "formattedDuration": "1 min 44 seg",
+        "sunAltitude": "7.8°",
+        "sunAzimuth": "288° (WNW)"
+      },
+      "routePlanner": {
+        "madrid": {
+          "distanceKm": 540,
+          "travelTime": "2h 15m (AVE)",
+          "route": "AVE Madrid-Camp de Tarragona / AP-7"
+        },
+        "barcelona": {
+          "distanceKm": 98,
+          "travelTime": "1h 05m",
+          "route": "Autopista AP-7 / C-32"
+        }
+      },
+      "whatToDo": {
+        "morning": "Anfiteatro Romano a orillas del mar.",
+        "afternoon": "Paseo Arqueológico y Murallas de Tarraco.",
+        "eclipseMoment": "Totalidad desde el Balcón del Mediterráneo con el sol sobre la costa romana.",
+        "night": "Cena de pescado fresco en el barrio marinero del Serrallo."
+      },
+      "publicObservationSpots": [
+        {
+          "name": "Balcón del Mediterráneo",
+          "desc": "Mirador de 40m sobre el mar con vista limpia al poniente solar.",
+          "parkingNearby": "Aparcamiento Rambla Nova (350 plazas)",
+          "optimalTime": "20:28:20 CEST - 20:30:04 CEST",
+          "recommendedArrival": "17:30 CEST"
+        },
+        {
+          "name": "Anfiteatro Romano de Tarraco",
+          "desc": "Recinto histórico arqueológico patrimonio UNESCO sobre el mar.",
+          "parkingNearby": "Aparcamiento Saavedra (400 plazas)",
+          "optimalTime": "20:28:20 CEST - 20:30:04 CEST",
+          "recommendedArrival": "17:00 CEST"
+        },
+        {
+          "name": "Torre del Pretori y Circo Romano",
+          "desc": "Vista elevada desde las terrazas superiores del complejo imperial.",
+          "parkingNearby": "Aparcamiento Murallas (300 plazas)",
+          "optimalTime": "20:28:20 CEST - 20:30:04 CEST",
+          "recommendedArrival": "16:45 CEST"
+        },
+        {
+          "name": "Passeig Marítim Rafael Casanova",
+          "desc": "Paseo costero llano con perfecta visibilidad del horizonte marino.",
+          "parkingNearby": "Aparcamiento Platja del Miracle (500 plazas)",
+          "optimalTime": "20:28:20 CEST - 20:30:04 CEST",
+          "recommendedArrival": "18:00 CEST"
+        },
+        {
+          "name": "Acueducto de les Ferreres (Pont del Diable)",
+          "desc": "Monumento romano rodeado de naturaleza despejada para fotografía.",
+          "parkingNearby": "Parking Parc Francolí (250 plazas)",
+          "optimalTime": "20:28:20 CEST - 20:30:04 CEST",
+          "recommendedArrival": "16:00 CEST"
+        }
+      ],
+      "parkingLogistics": {
+        "mainArea": "Aparcamiento Rambla Nova / Serrallo.",
+        "capacityNote": "Cortes temporales en Via Augusta durante el pico solar.",
+        "coordinates": "41.1152, 1.2510",
+        "trafficAdvice": "Acceso recomendado por A-7 salida Tarragona Centre."
+      },
+      "accommodations": [
+        {
+          "name": "Hotel Imperial Tarraco 4★ Superior",
+          "type": "Hotel Vistas Marítimas",
+          "priceRange": "€€€€",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Tarragona",
+          "availabilityStatus": "Alta Demanda",
+          "availabilityBadge": "warning"
+        },
+        {
+          "name": "Hotel URVH Tarragona",
+          "type": "Hotel Histórico Urbano",
+          "priceRange": "85€ - 145€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Tarragona",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Casa Rural Tradicional de Tarragona (Cataluña)",
+          "type": "Alojamiento Rural de Encanto",
+          "priceRange": "75€ - 130€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Tarragona",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Apartamentos Turísticos Franja Solar Tarragona",
+          "type": "Apartamentos Vacacionales",
+          "priceRange": "85€ - 145€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Tarragona",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Hostal & Posada Real de Tarragona",
+          "type": "Posada Histórica Central",
+          "priceRange": "60€ - 95€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Tarragona",
+          "availabilityStatus": "Últimas 2 Habitaciones",
+          "availabilityBadge": "danger"
+        }
+      ],
+      "history": "Antigua Tarraco romana, capital de la Hispania Citerior y sitio Patrimonio de la Humanidad UNESCO.",
+      "astrology": {
+        "zodiacDegree": "20° 19' Leo",
+        "fixedStar": "Regulus & Sol Romanus",
+        "element": "Piedra Romana & Mar",
+        "cosmicMeaning": "Fortaleza imperecedera, legado histórico y reconexión con el sol imperial."
+      },
+      "isTop10": true,
+      "whatToEat": {
+        "dishes": [
+          "Romesco de Pescado típico del Serrallo",
+          "Calçots con salsa Romesco artesana",
+          "Arroz Negro Tarraconense con alioli",
+          "Espineta con Caracoles",
+          "Menjar Blanc de Reus / Tarragona"
+        ],
+        "drinks": "Vino Blanco D.O. Tarragona o D.O.Q. Priorat"
+      },
+      "whereToEat": [
+        {
+          "name": "Restaurante Xaloc (El Serrallo)",
+          "type": "Marisquería de puerto marinero",
+          "specialty": "Guisos de romesco y gambas de Tarragona",
+          "priceRange": "€€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Tarragona"
+        },
+        {
+          "name": "El Llagut",
+          "type": "Taverna marinera artesana",
+          "specialty": "Arroces ecológicos y productos de lonja",
+          "priceRange": "€€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Tarragona"
+        },
+        {
+          "name": "Restaurante Gastrobar Corona Solar",
+          "type": "Cocina de Autor & Maridaje",
+          "specialty": "Menú degustación temático Eclipse 2026",
+          "priceRange": "45€ - 70€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Tarragona"
+        },
+        {
+          "name": "Les Coques",
+          "type": "Restaurante de Gastronomía Catalana",
+          "specialty": "Cocina de temporada y carnes a la brasa",
+          "priceRange": "35€ - 55€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Tarragona"
+        },
+        {
+          "name": "Casa de Comidas Abuela Rosa",
+          "type": "Cocina Casera Tradicional",
+          "specialty": "Platos de cuchara y mariscos sencillos",
+          "priceRange": "18€ - 30€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Tarragona"
+        }
+      ]
+    },
+    {
+      "id": "valencia-city",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Ciutat_de_les_Arts_i_les_Ci%C3%A8ncies%2C_Val%C3%A8ncia%2C_Espa%C3%B1a%2C_2014-06-30%2C_DD_110-112_HDR.JPG",
+      "name": "Valencia & Ciudad de las Artes",
+      "province": "Valencia (Comunidad Valenciana)",
+      "coords": [
+        39.4699,
+        -0.3763
+      ],
+      "timeline": {
+        "partialStart": "19:31:30 CEST",
+        "totalityStart": "20:28:45 CEST",
+        "totalityMax": "20:29:37 CEST",
+        "totalityEnd": "20:30:29 CEST",
+        "sunset": "21:08:00 CEST",
+        "formattedDuration": "1 min 44 seg",
+        "sunAltitude": "8.2°",
+        "sunAzimuth": "287° (WNW)"
+      },
+      "routePlanner": {
+        "madrid": {
+          "distanceKm": 350,
+          "travelTime": "1h 50m (AVE)",
+          "route": "AVE Madrid-Joaquín Sorolla / A-3"
+        },
+        "barcelona": {
+          "distanceKm": 350,
+          "travelTime": "3h 00m",
+          "route": "Autopista AP-7"
+        }
+      },
+      "whatToDo": {
+        "morning": "Ciudad de las Artes y las Ciencias y Hemisfèric.",
+        "afternoon": "Parque Natural de la Albufera y paseo en barca.",
+        "eclipseMoment": "Totalidad a 8.2° reflejada en las láminas de agua de la Ciudad de las Ciencias.",
+        "night": "Cena de Paella Valenciana a la leña en El Palmar."
+      },
+      "publicObservationSpots": [
+        {
+          "name": "Láminas de Agua de la Ciudad de las Artes y las Ciencias",
+          "desc": "Espacio futurista abierto con reflejos espectaculares de la corona solar.",
+          "parkingNearby": "Aparcamiento Umbracle CAC (800 plazas)",
+          "optimalTime": "20:28:45 CEST - 20:30:29 CEST",
+          "recommendedArrival": "17:00 CEST"
+        },
+        {
+          "name": "Mirador del Estany de L'Albufera (El Saler)",
+          "desc": "Atardecer mítico sobre el lago dulce rodeado de arrozales.",
+          "parkingNearby": "Aparcamiento Embarcadero Albufera (200 plazas)",
+          "optimalTime": "20:28:45 CEST - 20:30:29 CEST",
+          "recommendedArrival": "16:30 CEST"
+        },
+        {
+          "name": "Torres de Serranos y Cauce del Turia",
+          "desc": "Puerta medieval con jardín urbano de 9km abierto al cielo occidental.",
+          "parkingNearby": "Aparcamiento Severo Ochoa (350 plazas)",
+          "optimalTime": "20:28:45 CEST - 20:30:29 CEST",
+          "recommendedArrival": "17:30 CEST"
+        },
+        {
+          "name": "Playa de la Malvarrosa / Paseo Marítimo",
+          "desc": "Amplia playa de arena fina despejada al horizonte solar.",
+          "parkingNearby": "Aparcamiento Neptuno (500 plazas)",
+          "optimalTime": "20:28:45 CEST - 20:30:29 CEST",
+          "recommendedArrival": "18:00 CEST"
+        },
+        {
+          "name": "Marina Real Juan Carlos I",
+          "desc": "Dársena deportiva con terrazas al aire libre y visión despejada.",
+          "parkingNearby": "Aparcamiento Veles e Vents (400 plazas)",
+          "optimalTime": "20:28:45 CEST - 20:30:29 CEST",
+          "recommendedArrival": "17:30 CEST"
+        }
+      ],
+      "parkingLogistics": {
+        "mainArea": "Aparcamiento Umbracle / Marina de Valencia.",
+        "capacityNote": "Gran afluencia esperada en la Albufera; se aconseja Metro / Tranvía L10.",
+        "coordinates": "39.4542, -0.3503",
+        "trafficAdvice": "Llegada recomendada por la V-30 / V-31."
+      },
+      "accommodations": [
+        {
+          "name": "Las Arenas Balneario Resort 5★",
+          "type": "Resort de Playa de Lujo",
+          "priceRange": "€€€€€",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Valencia",
+          "availabilityStatus": "Alta Demanda",
+          "availabilityBadge": "warning"
+        },
+        {
+          "name": "Hotel SH Valencia Palace 5★",
+          "type": "Hotel Urbano de Lujo",
+          "priceRange": "130€ - 220€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Valencia",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Hotel Boutique Plaza Valencia",
+          "type": "Hotel Boutique Histórico",
+          "priceRange": "95€ - 160€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Valencia",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Apartamentos Turísticos Franja Solar Valencia",
+          "type": "Apartamentos Vacacionales",
+          "priceRange": "85€ - 145€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Valencia",
+          "availabilityStatus": "Disponible",
+          "availabilityBadge": "success"
+        },
+        {
+          "name": "Hostal & Posada Real de Valencia",
+          "type": "Posada Histórica Barrio del Carmen",
+          "priceRange": "60€ - 95€/noche",
+          "link": "https://www.booking.com/searchresults.es.html?ss=Valencia",
+          "availabilityStatus": "Últimas 2 Habitaciones",
+          "availabilityBadge": "danger"
+        }
+      ],
+      "history": "Tierra de luz fundada por los romanos en 138 a.C., cuna de la paella y del Santo Cáliz.",
+      "astrology": {
+        "zodiacDegree": "20° 17' Leo",
+        "fixedStar": "Regulus & Fuego Levantino",
+        "element": "Luz & Agua Dulce L'Albufera",
+        "cosmicMeaning": "Alegría vital, expansión de la conciencia solar y abundancia mediterránea."
+      },
+      "isTop10": true,
+      "whatToEat": {
+        "dishes": [
+          "Paella Valenciana Tradicional cocinada con leña de naranjo",
+          "Arroz a Banda con alioli suave",
+          "All i Pebre de anguilas de L'Albufera",
+          "Horchata de Chufa artesana con Fartons",
+          "Esgarraet de pimiento asado y bacalao"
+        ],
+        "drinks": "Agua de Valencia (Cava + Zumo de Naranja D.O.) o Vino Utiel-Requena"
+      },
+      "whereToEat": [
+        {
+          "name": "La Pepica (Playa de la Malvarrosa)",
+          "type": "Arrocería Histórica centenaria",
+          "specialty": "Paella marinera de mariscos frescos",
+          "priceRange": "€€€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Valencia"
+        },
+        {
+          "name": "Restaurante El Mateu (El Palmar)",
+          "type": "Arrocería en el corazón de la Albufera",
+          "specialty": "Paella valenciana tradicional a la leña",
+          "priceRange": "€€€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Valencia"
+        },
+        {
+          "name": "Restaurante Gastrobar Corona Solar",
+          "type": "Cocina de Autor & Maridaje",
+          "specialty": "Menú degustación temático Eclipse 2026",
+          "priceRange": "45€ - 70€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Valencia"
+        },
+        {
+          "name": "Casa Montaña (El Cabanyal)",
+          "type": "Taberna Histórica fundada en 1836",
+          "specialty": "Tapas gourmet y maridajes de vino",
+          "priceRange": "35€ - 55€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Valencia"
+        },
+        {
+          "name": "Casa de Comidas Abuela Rosa",
+          "type": "Cocina Casera Levantina",
+          "specialty": "Guisos de arroz y postres caseros",
+          "priceRange": "18€ - 30€",
+          "link": "https://www.google.com/maps/search/Restaurantes+en+Valencia"
         }
       ]
     }

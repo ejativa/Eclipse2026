@@ -59,6 +59,23 @@ body {
   gap: 12px;
 }
 
+.clickable-home {
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  border-radius: 8px;
+  padding: 4px 6px;
+}
+
+.clickable-home:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+
+.clickable-home:focus-visible {
+  outline: 2px solid var(--corona-gold);
+}
+
 .header-right-actions {
   display: flex;
   align-items: center;
@@ -92,6 +109,46 @@ body {
 .btn-lang:hover {
   background: var(--cyan-bright);
   color: #000;
+}
+
+.btn-safety {
+  background: rgba(249, 115, 22, 0.15);
+  border-color: #f97316;
+  color: #f97316;
+}
+
+.btn-safety:hover {
+  background: #f97316;
+  color: #fff;
+}
+
+.safety-rule-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-left: 4px solid #f97316;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.safety-rule-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.safety-rule-card h4 {
+  font-size: 0.9rem;
+  color: var(--corona-gold);
+  margin-bottom: 4px;
+}
+
+.safety-rule-card p {
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  line-height: 1.4;
 }
 
 .solar-logo {

@@ -149,6 +149,18 @@ const i18n = {
       simYoutube: "📺 YouTube Live Stream",
       simStatus: "📚 60FPS Simulator",
 
+      // Safety Modal
+      safetyBtn: "Eye Safety",
+      safetyTitle: "👓 Solar Eye Safety & ISO 12312-2 Certification",
+      safetySub: "Essential guidelines to safely view the Solar Eclipse of August 12, 2026",
+      safetyBody: `<div class="safety-rule-card"><div class="safety-rule-icon">⚠️</div><div><h4>Never look directly at the partial Sun without certified protection</h4><p>Regular sunglasses, dark glass, or improvised filters are <b>NOT safe</b> and cause permanent retinal damage.</p></div></div><div class="safety-rule-card"><div class="safety-rule-icon">🕶️</div><div><h4>ISO 12312-2 Certified Eclipse Glasses</h4><p>Always use glasses certified under international standard ISO 12312-2. Inspect lenses for scratches before use.</p></div></div><div class="safety-rule-card"><div class="safety-rule-icon">🌑</div><div><h4>During 100% Totality ONLY</h4><p>Remove eclipse glasses <b>ONLY during the brief seconds of 100% totality</b> when the solar corona is visible.</p></div></div><div class="safety-rule-card"><div class="safety-rule-icon">🔭</div><div><h4>Telescopes & Cameras</h4><p>Solar optical filters MUST be mounted on the FRONT aperture of telescopes/cameras, never behind the eyepiece.</p></div></div>`,
+
+      // SEO & Social Meta
+      seoTitle: "liveTheEclipse2026 - Total Solar Eclipse Spain August 12, 2026 | Interactive Map & Guide",
+      seoDescription: "Interactive map & guide to the Total Solar Eclipse of August 12, 2026 in Spain. Explore 50+ municipalities in the totality path (Barcelona, Valencia, Tarragona, Muxía), 60FPS eclipse simulator, astral charts, viewpoints, hotels, and traditional gastronomy.",
+      seoOgTitle: "liveTheEclipse2026 - Total Solar Eclipse August 12, 2026 in Spain",
+      seoOgDesc: "Interactive guide to 50+ municipalities in the totality path across Spain. Includes 60FPS eclipse simulator, astral charts, public viewpoints, hotel booking engines, and traditional gastronomy.",
+
       // Language
       langSwitch: "🇪🇸 ES",
       langSwitchTitle: "Cambiar a Español"
@@ -276,6 +288,17 @@ const i18n = {
       simCanvas: "🎓 Simulador Astronómico Paso Lunar (60FPS)",
       simYoutube: "📺 Transmisión YouTube Live Directo",
       simStatus: "📚 Simulador 60FPS",
+
+      safetyBtn: "Seguridad Ocular",
+      safetyTitle: "👓 Protección Ocular e ISO 12312-2",
+      safetySub: "Guía imprescindible para observar con seguridad el Eclipse Solar del 12 de agosto de 2026",
+      safetyBody: `<div class="safety-rule-card"><div class="safety-rule-icon">⚠️</div><div><h4>Nunca mires directamente al Sol parcial sin protección homologada</h4><p>Las gafas de sol convencionales o filtros caseros <b>NO son seguros</b> y provocan retinopatía solar irreversible.</p></div></div><div class="safety-rule-card"><div class="safety-rule-icon">🕶️</div><div><h4>Gafas de Eclipse Certificadas ISO 12312-2</h4><p>Utiliza únicamente gafas con marcado CE y certificación ISO 12312-2. Revisa que no tengan arañazos antes de usarlas.</p></div></div><div class="safety-rule-card"><div class="safety-rule-icon">🌑</div><div><h4>ÚNICAMENTE durante la Totalidad al 100%</h4><p>Solo puedes quitarte las gafas durante los breves segundos de <b>totalidad absoluta</b> cuando emerge la corona solar.</p></div></div><div class="safety-rule-card"><div class="safety-rule-icon">🔭</div><div><h4>Cámaras, Telescopios y Prismáticos</h4><p>El filtro solar adecuado DEBE colocarse en el FRONTAL del objetivo, nunca detrás del ocular.</p></div></div>`,
+
+      // SEO & Social Meta
+      seoTitle: "viveElEclipse2026 - Eclipse Solar Total en España 12 de Agosto de 2026 | Guía y Mapa Interactivo",
+      seoDescription: "Guía y mapa interactivo del Eclipse Solar Total del 12 de agosto de 2026 en España. Explora los municipios de la franja de totalidad (Barcelona, Valencia, Tarragona, Muxía), simulador 60FPS, cartas astrales, miradores, alojamientos y gastronomía.",
+      seoOgTitle: "viveElEclipse2026 - Eclipse Solar Total 12 de Agosto de 2026 en España",
+      seoOgDesc: "Guía interactiva de más de 50 municipios en la franja de totalidad en España. Incluye simulador 60FPS, cartas astrales, miradores públicos, motores de reserva de hotel y gastronomía típica.",
 
       langSwitch: "🇬🇧 EN",
       langSwitchTitle: "Switch to English"
